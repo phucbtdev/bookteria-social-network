@@ -1,12 +1,14 @@
 package com.devteria.profile.controller;
 
-import com.devteria.profile.dto.request.UserProfileCreation;
+import org.springframework.web.bind.annotation.*;
+
+import com.devteria.profile.dto.request.ProfileCreationRequest;
 import com.devteria.profile.dto.response.UserProfileResponse;
 import com.devteria.profile.service.UserRepositoryService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class UserProfileController {
     UserRepositoryService userRepositoryService;
 
     @PostMapping("/users")
-    UserProfileResponse createUserProfile(@RequestBody UserProfileCreation request) {
+    UserProfileResponse createUserProfile(@RequestBody ProfileCreationRequest request) {
         return userRepositoryService.createProfile(request);
     }
 

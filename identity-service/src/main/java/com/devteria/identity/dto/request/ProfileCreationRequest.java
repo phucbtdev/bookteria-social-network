@@ -1,18 +1,19 @@
-package com.devteria.profile.dto.request;
+package com.devteria.identity.dto.request;
+
+import java.time.LocalDate;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileCreation {
+public class ProfileCreationRequest {
+    String userId;
     String firstName;
     String lastName;
-    LocalDate dateOfBirth;
+    LocalDate dob;
     String city;
 }

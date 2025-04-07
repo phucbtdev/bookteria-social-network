@@ -1,17 +1,17 @@
-package com.devteria.profile.dto.response;
-
-import java.time.LocalDate;
+package com.devteria.identity.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserProfileResponse {
+public class ProfileCreationResponse {
     String id;
     String firstName;
     String lastName;
