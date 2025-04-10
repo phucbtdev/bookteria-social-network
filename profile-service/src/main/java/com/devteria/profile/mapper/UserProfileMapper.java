@@ -11,4 +11,6 @@ public interface UserProfileMapper {
     UserProfile toUserProfile(ProfileCreationRequest profileCreationRequest);
 
     UserProfileResponse toUserProfileResponse(UserProfile userProfile);
+
+    UserProfileResponse toUserResponse(UserProfile userProfile);
 }
