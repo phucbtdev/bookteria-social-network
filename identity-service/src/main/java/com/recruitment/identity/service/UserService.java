@@ -54,7 +54,6 @@ public class UserService {
 
         var profile = profileMapper.toProfileCreationRequest(request);
         profile.setUserId(user.getId());
-        log.info(profile.getUserId());
         profileClient.createProfile(profile);
 
         return userMapper.toUserResponse(user);
@@ -89,7 +88,6 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
-        log.info("In method get Users");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
