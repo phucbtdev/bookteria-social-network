@@ -22,6 +22,9 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
+	compileOnly("org.projectlombok:lombok:1.18.30")
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 dependencyManagement {
