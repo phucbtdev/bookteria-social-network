@@ -25,6 +25,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compileOnly("org.projectlombok:lombok:1.18.30")
 	annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+	// https://mvnrepository.com/artifact/io.projectreactor/reactor-test
+	testImplementation("io.projectreactor:reactor-test:3.7.2")
 }
 
 dependencyManagement {
