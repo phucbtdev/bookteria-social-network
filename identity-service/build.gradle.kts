@@ -38,6 +38,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     // Lombok (as annotationProcessor)
