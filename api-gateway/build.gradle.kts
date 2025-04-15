@@ -20,14 +20,18 @@ extra["springCloudVersion"] = "2023.0.1"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	// https://mvnrepository.com/artifact/org.projectlombok/lombok
-	compileOnly("org.projectlombok:lombok:1.18.30")
-	annotationProcessor("org.projectlombok:lombok:1.18.30")
 
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	// https://mvnrepository.com/artifact/io.projectreactor/reactor-test
 	testImplementation("io.projectreactor:reactor-test:3.7.2")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
+
+	compileOnly("org.projectlombok:lombok:1.18.30")
+
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+
 }
 
 dependencyManagement {
