@@ -39,6 +39,10 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    // MapStruct
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0") // Sử dụng phiên bản mới nhất
     runtimeOnly("com.mysql:mysql-connector-j")
 
     // Lombok (as annotationProcessor)
@@ -47,8 +51,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 
-    // MapStruct
-    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
