@@ -44,7 +44,8 @@ public class FilterConfiguration implements GlobalFilter, Ordered {
     @NonFinal
     private String[] publicEndpoints = {
             "/identity/auth/.*",
-            "/identity/users/register"
+            "/identity/users/register",
+            "/notification/send/mail"
     };
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
