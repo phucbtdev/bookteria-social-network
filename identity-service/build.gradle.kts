@@ -43,6 +43,8 @@ dependencies {
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0") // Sử dụng phiên bản mới nhất
+    // https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+    implementation("org.springframework.kafka:spring-kafka:3.3.4")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     // Lombok (as annotationProcessor)

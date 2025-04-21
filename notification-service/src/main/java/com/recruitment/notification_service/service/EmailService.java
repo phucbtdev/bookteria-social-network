@@ -12,11 +12,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,16 +33,19 @@ public class EmailService {
         BrevoEmailRequest brevoEmailRequest = BrevoEmailRequest.builder()
                 .sender(BrevoSender.builder()
                         .name("Loid Dev")
-                        .email("trongphuceazy@gmail.com")
+                        .email("phucbuitrong.dev@gmail.com")
                         .build())
                 .to(List.of(sendEmailRequest.getTo()))
                 .subject(sendEmailRequest.getSubject())
                 .htmlContent(sendEmailRequest.getHtmlContent())
                 .build();
 
+        log.info("BrevoEmailRequest :{}", brevoEmailRequest);
+
         try {
             return brevoMailRepository.sendMail(apiKey,brevoEmailRequest);
-        } catch (FeignException e) {
+        } catch (FeignException ex) {
+            log.error("Lỗi khi gửi email: {}", ex.getMessage(), ex);
             throw new AppException(ErrorCode.CANNOT_SEND_EMAIL);
         }
     }
