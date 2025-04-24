@@ -1,16 +1,15 @@
 package com.recruitment.job_service.service;
 
-import com.recruitment.job_service.dto.request.JobPostRequest;
-import com.recruitment.job_service.dto.response.JobPostResponse;
+import com.recruitment.job_service.dto.request.JobCreationRequest;
+import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.dto.response.PageResponse;
-import com.recruitment.job_service.entity.JobPost;
-import com.recruitment.job_service.mapper.JobPostMapper;
-import com.recruitment.job_service.repository.JobPostRepository;
+import com.recruitment.job_service.entity.Job;
+import com.recruitment.job_service.mapper.JobMapper;
+import com.recruitment.job_service.repository.JobRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,44 +18,43 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class JobPostService {
-    JobPostRepository jobPostRepository;
-    JobPostMapper jobPostMapper;
+public class JobService {
+    JobRepository jobRepository;
+    JobMapper jobMapper;
 
-   public JobPostResponse createJob(JobPostRequest jobPostRequest) {
+   public JobResponse createJob(JobCreationRequest jobCreationRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JobPost jobPost = JobPost.builder()
+        Job job = Job.builder()
                 .userId(authentication.getName())
-                .content(jobPostRequest.getContent())
+                .content(jobCreationRequest.getContent())
                 .createdDate(Instant.now())
                 .modifiedDate(Instant.now())
                 .build();
 
-        var user =  jobPostRepository.save(jobPost);
-        return  jobPostMapper.toJobPostResponse(user);
+        var user =  jobRepository.save(job);
+        return  jobMapper.entityToJobResponse(user);
    }
 
-   public PageResponse<JobPostResponse> getAllJobPosts(int page, int size, String sortField, String sortDirection) {
+   public PageResponse<JobResponse> getAllJobPosts(int page, int size, String sortField, String sortDirection) {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        String userId =  authentication.getName();
        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                Sort.by(sortField).ascending() : Sort.by(sortField).descending();
 
        Pageable pageable = PageRequest.of(page, size, sort);
-       var pageData = jobPostRepository.findAllByUserId(userId,pageable);
+       var pageData = jobRepository.findAllByUserId(userId,pageable);
 
-       return PageResponse.<JobPostResponse>builder()
+       return PageResponse.<JobResponse>builder()
                .pageNo(page)
                .pageSize(size)
                .totalPages(pageData.getTotalPages())
                .totalElements(pageData.getTotalElements())
-               .data(pageData.getContent().stream().map(jobPostMapper::toJobPostResponse).toList())
+               .data(pageData.getContent().stream().map(jobMapper::entityToJobResponse).toList())
                .build();
    }
 }
