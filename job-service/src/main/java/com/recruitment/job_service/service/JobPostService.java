@@ -2,6 +2,7 @@ package com.recruitment.job_service.service;
 
 import com.recruitment.job_service.dto.request.JobPostRequest;
 import com.recruitment.job_service.dto.response.JobPostResponse;
+import com.recruitment.job_service.dto.response.PageResponse;
 import com.recruitment.job_service.entity.JobPost;
 import com.recruitment.job_service.mapper.JobPostMapper;
 import com.recruitment.job_service.repository.JobPostRepository;
@@ -9,6 +10,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -37,9 +42,21 @@ public class JobPostService {
         return  jobPostMapper.toJobPostResponse(user);
    }
 
-   public List<JobPostResponse> getAllJobPosts() {
+   public PageResponse<JobPostResponse> getAllJobPosts(int page, int size, String sortField, String sortDirection) {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        String userId =  authentication.getName();
-       return jobPostRepository.findAllByUserId(userId).stream().map(jobPostMapper::toJobPostResponse).toList();
+       Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+               Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+
+       Pageable pageable = PageRequest.of(page, size, sort);
+       var pageData = jobPostRepository.findAllByUserId(userId,pageable);
+
+       return PageResponse.<JobPostResponse>builder()
+               .pageNo(page)
+               .pageSize(size)
+               .totalPages(pageData.getTotalPages())
+               .totalElements(pageData.getTotalElements())
+               .data(pageData.getContent().stream().map(jobPostMapper::toJobPostResponse).toList())
+               .build();
    }
 }

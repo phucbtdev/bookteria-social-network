@@ -3,6 +3,7 @@ package com.recruitment.job_service.controller;
 import com.recruitment.job_service.dto.request.JobPostRequest;
 import com.recruitment.job_service.dto.response.ApiResponse;
 import com.recruitment.job_service.dto.response.JobPostResponse;
+import com.recruitment.job_service.dto.response.PageResponse;
 import com.recruitment.job_service.service.JobPostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,13 @@ public class JobPostController {
     }
 
     @GetMapping
-    ApiResponse<List<JobPostResponse>> getJobList() {
-        return ApiResponse.<List<JobPostResponse>>builder()
-                .result(jobPostService.getAllJobPosts()).build();
+    ApiResponse<PageResponse<JobPostResponse>> getJobList(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        return ApiResponse.<PageResponse<JobPostResponse>>builder()
+                .result(jobPostService.getAllJobPosts(pageNo,pageSize,sortBy,sortDir)).build();
     }
-
 }
