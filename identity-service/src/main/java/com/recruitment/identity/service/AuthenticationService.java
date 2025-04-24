@@ -125,8 +125,8 @@ public class AuthenticationService {
                 .toEpochMilli());
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(users.getUsername())
-                .issuer("devteria.com")
+                .subject(users.getId())
+                .issuer("phucbtdev.com")
                 .issueTime(issueTime)
                 .expirationTime(expiryTime)
                 .jwtID(UUID.randomUUID().toString())

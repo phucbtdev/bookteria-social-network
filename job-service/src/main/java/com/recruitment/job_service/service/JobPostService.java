@@ -8,6 +8,7 @@ import com.recruitment.job_service.repository.JobPostRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -37,8 +39,7 @@ public class JobPostService {
 
    public List<JobPostResponse> getAllJobPosts() {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String userId =  authentication.getName();
+       String userId =  authentication.getName();
        return jobPostRepository.findAllByUserId(userId).stream().map(jobPostMapper::toJobPostResponse).toList();
-
    }
 }

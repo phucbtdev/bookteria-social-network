@@ -1,7 +1,6 @@
 package com.recruitment.job_service.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,9 +14,15 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobPost {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
+
+    @Column(name = "userId")
     String userId;
+
+    @Column(name = "content")
     String content;
+
     Instant createdDate;
     Instant modifiedDate;
 }
