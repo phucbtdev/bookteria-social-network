@@ -2,11 +2,11 @@ package com.recruitment.identity.service;
 
 import java.util.List;
 
+import com.recruitment.identity.entity.Permissions;
 import org.springframework.stereotype.Service;
 
 import com.recruitment.identity.dto.request.PermissionRequest;
 import com.recruitment.identity.dto.response.PermissionResponse;
-import com.recruitment.identity.entity.Permission;
 import com.recruitment.identity.mapper.PermissionMapper;
 import com.recruitment.identity.repository.PermissionRepository;
 
@@ -24,9 +24,9 @@ public class PermissionService {
     PermissionMapper permissionMapper;
 
     public PermissionResponse create(PermissionRequest request) {
-        Permission permission = permissionMapper.toPermission(request);
-        permission = permissionRepository.save(permission);
-        return permissionMapper.toPermissionResponse(permission);
+        Permissions permissions = permissionMapper.toPermission(request);
+        permissions = permissionRepository.save(permissions);
+        return permissionMapper.toPermissionResponse(permissions);
     }
 
     public List<PermissionResponse> getAll() {

@@ -7,14 +7,14 @@ import org.mapstruct.MappingTarget;
 import com.recruitment.identity.dto.request.UserCreationRequest;
 import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
-import com.recruitment.identity.entity.User;
+import com.recruitment.identity.entity.Users;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    User toUser(UserCreationRequest request);
+    Users toUser(UserCreationRequest request);
 
-    UserResponse toUserResponse(User user);
+    UserResponse toUserResponse(Users users);
 
     @Mapping(target = "roles", ignore = true)
-    void updateUser(@MappingTarget User user, UserUpdateRequest request);
+    void updateUser(@MappingTarget Users users, UserUpdateRequest request);
 }

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.recruitment.identity.entity.Users;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +20,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.recruitment.identity.dto.request.UserCreationRequest;
 import com.recruitment.identity.dto.response.UserResponse;
-import com.recruitment.identity.entity.User;
 import com.recruitment.identity.exception.AppException;
 import com.recruitment.identity.repository.UserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
-public class UserServiceTest {
+public class UsersServiceTest {
     @Autowired
     private UserService userService;
 
@@ -34,7 +34,7 @@ public class UserServiceTest {
 
     private UserCreationRequest request;
     private UserResponse userResponse;
-    private User user;
+    private Users users;
     private LocalDate dob;
 
     @BeforeEach
@@ -57,7 +57,7 @@ public class UserServiceTest {
                 .dob(dob)
                 .build();
 
-        user = User.builder()
+        users = Users.builder()
                 .id("cf0600f538b3")
                 .username("john")
                 .firstName("John")
@@ -70,7 +70,7 @@ public class UserServiceTest {
     void createUser_validRequest_success() {
         // GIVEN
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        when(userRepository.save(any())).thenReturn(user);
+        when(userRepository.save(any())).thenReturn(users);
 
         // WHEN
         var response = userService.createUser(request);
@@ -95,7 +95,7 @@ public class UserServiceTest {
     @Test
     @WithMockUser(username = "john")
     void getMyInfo_valid_success() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(users));
 
         var response = userService.getMyInfo();
 

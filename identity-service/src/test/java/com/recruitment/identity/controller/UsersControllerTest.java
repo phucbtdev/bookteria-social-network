@@ -26,7 +26,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/test.properties")
-public class UserControllerTest {
+public class UsersControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

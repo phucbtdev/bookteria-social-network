@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.recruitment.event.dto.NotificationEvent;
+import com.recruitment.identity.entity.Roles;
+import com.recruitment.identity.entity.Users;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,8 +16,6 @@ import com.recruitment.identity.constant.PredefinedRole;
 import com.recruitment.identity.dto.request.UserCreationRequest;
 import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
-import com.recruitment.identity.entity.Role;
-import com.recruitment.identity.entity.User;
 import com.recruitment.identity.exception.AppException;
 import com.recruitment.identity.exception.ErrorCode;
 import com.recruitment.identity.mapper.ProfileMapper;
@@ -46,17 +46,17 @@ public class UserService {
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
 
-        User user = userMapper.toUser(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        Users users = userMapper.toUser(request);
+        users.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<Role> roles = new HashSet<>();
+        HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
 
-        user.setRoles(roles);
-        user = userRepository.save(user);
+        users.setRoles(roles);
+        users = userRepository.save(users);
 
         var profile = profileMapper.toProfileCreationRequest(request);
-        profile.setUserId(user.getId());
+        profile.setUserId(users.getId());
         profileClient.createProfile(profile);
 
         NotificationEvent notificationEvent = NotificationEvent.builder()
@@ -65,36 +65,36 @@ public class UserService {
                 .subject("Welcome to PhucbtDev")
                 .body("Hello" + request.getUsername())
                 .build();
-        log.info("User info: {}",user);
+        log.info("Users info: {}", users);
         log.info("Notification info: {}",notificationEvent);
 
         kafkaTemplate.send("notification-delivery1",
                 notificationEvent
         );
 
-        return userMapper.toUserResponse(user);
+        return userMapper.toUserResponse(users);
     }
 
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Users users = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        return userMapper.toUserResponse(user);
+        return userMapper.toUserResponse(users);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Users users = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userMapper.updateUser(users, request);
+        users.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var roles = roleRepository.findAllById(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
+        users.setRoles(new HashSet<>(roles));
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toUserResponse(userRepository.save(users));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

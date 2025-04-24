@@ -33,27 +33,28 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.security:spring-security-crypto")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("org.springframework.security:spring-security-crypto")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // MapStruct
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0") // Sử dụng phiên bản mới nhất
     // https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
     implementation("org.springframework.kafka:spring-kafka:3.3.4")
-    runtimeOnly("com.mysql:mysql-connector-j")
+    //runtimeOnly("com.mysql:mysql-connector-j")
+    implementation("org.postgresql:postgresql")
+    //https://mvnrepository.com/artifact/org.springframework/spring-jdbc
+    runtimeOnly("org.postgresql:postgresql")
 
-    // Lombok (as annotationProcessor)
+    //Lombok (as annotationProcessor)
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
-
-
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

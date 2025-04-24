@@ -2,14 +2,13 @@ package com.recruitment.identity.repository;
 
 import java.util.Optional;
 
+import com.recruitment.identity.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.recruitment.identity.entity.User;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<Users, String> {
     boolean existsByUsername(String username);
 
-    Optional<User> findByUsername(String username);
+    Optional<Users> findByUsername(String username);
 }

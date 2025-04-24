@@ -1,21 +1,23 @@
-package com.recruitment.identity.entity;
+package com.recruitment.job_service.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
+import java.time.Instant;
+
+@Entity
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-public class Permission {
+public class JobPost {
     @Id
-    String name;
-
-    String description;
+    Long id;
+    String userId;
+    String content;
+    Instant createdDate;
+    Instant modifiedDate;
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+import com.recruitment.identity.entity.Users;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,6 @@ import com.recruitment.identity.dto.request.RefreshRequest;
 import com.recruitment.identity.dto.response.AuthenticationResponse;
 import com.recruitment.identity.dto.response.IntrospectResponse;
 import com.recruitment.identity.entity.InvalidatedToken;
-import com.recruitment.identity.entity.User;
 import com.recruitment.identity.exception.AppException;
 import com.recruitment.identity.exception.ErrorCode;
 import com.recruitment.identity.repository.InvalidatedTokenRepository;
@@ -116,7 +116,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private TokenInfo generateToken(User user) {
+    private TokenInfo generateToken(Users users) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         Date issueTime = new Date();
@@ -125,13 +125,13 @@ public class AuthenticationService {
                 .toEpochMilli());
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUsername())
+                .subject(users.getUsername())
                 .issuer("devteria.com")
                 .issueTime(issueTime)
                 .expirationTime(expiryTime)
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope", buildScope(user))
-                .claim("userId", user.getId())
+                .claim("scope", buildScope(users))
+                .claim("userId", users.getId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -164,11 +164,11 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    private String buildScope(User user) {
+    private String buildScope(Users users) {
         StringJoiner stringJoiner = new StringJoiner(" ");
 
-        if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(role -> {
+        if (!CollectionUtils.isEmpty(users.getRoles()))
+            users.getRoles().forEach(role -> {
                 stringJoiner.add("ROLE_" + role.getName());
                 if (!CollectionUtils.isEmpty(role.getPermissions()))
                     role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));

@@ -2,6 +2,7 @@ package com.recruitment.identity.configuration;
 
 import java.util.HashSet;
 
+import com.recruitment.identity.entity.Roles;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.recruitment.identity.constant.PredefinedRole;
-import com.recruitment.identity.entity.Role;
-import com.recruitment.identity.entity.User;
+import com.recruitment.identity.entity.Users;
 import com.recruitment.identity.repository.RoleRepository;
 import com.recruitment.identity.repository.UserRepository;
 
@@ -43,27 +43,27 @@ public class ApplicationInitConfig {
         log.info("Initializing application.....");
         return args -> {
             if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
-                roleRepository.save(Role.builder()
+                roleRepository.save(Roles.builder()
                         .name(PredefinedRole.USER_ROLE)
-                        .description("User role")
+                        .description("Users role")
                         .build());
 
-                Role adminRole = roleRepository.save(Role.builder()
+                Roles adminRoles = roleRepository.save(Roles.builder()
                         .name(PredefinedRole.ADMIN_ROLE)
                         .description("Admin role")
                         .build());
 
-                var roles = new HashSet<Role>();
-                roles.add(adminRole);
+                var roles = new HashSet<Roles>();
+                roles.add(adminRoles);
 
-                User user = User.builder()
+                Users users = Users.builder()
                         .username(ADMIN_USER_NAME)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .roles(roles)
                         .build();
 
-                userRepository.save(user);
-                log.warn("admin user has been created with default password: admin, please change it");
+                userRepository.save(users);
+                log.warn("admin users has been created with default password: admin, please change it");
             }
             log.info("Application initialization completed .....");
         };

@@ -13,6 +13,9 @@ import java.time.LocalDate;
 @Builder
 public class ProfileCreationResponse {
     String id;
+    String userId;
+    String username;
+    String email;
     String firstName;
     String lastName;
     LocalDate dob;
