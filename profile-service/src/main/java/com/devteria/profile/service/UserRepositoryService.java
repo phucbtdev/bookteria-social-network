@@ -30,6 +30,12 @@ public class UserRepositoryService {
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
 
+    public UserProfileResponse getProfileByUserId(String userId) {
+        UserProfile user = userRepository.findByUserId(userId);
+        log.info("Fetching user profile for userId: {}", user);
+        return userProfileMapper.toUserProfileResponse(user);
+    }
+
     public UserProfileResponse getProfile(String id) {
         UserProfile user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return userProfileMapper.toUserProfileResponse(user);

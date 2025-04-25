@@ -1,18 +1,25 @@
-package com.devteria.profile.dto.response;
+package com.recruitment.job_service.entity;
 
-import java.time.LocalDate;
-
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileResponse {
+@Entity
+public class UserProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+    @Column(name = "userId")
     String userId;
+
     String firstName;
     String lastName;
     LocalDate dob;

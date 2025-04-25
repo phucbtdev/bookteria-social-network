@@ -14,6 +14,7 @@ public class JobResponse {
     String id;
     String content;
     String userId;
+    String username;
     Instant createdDate;
     Instant modifiedDate;
 }
