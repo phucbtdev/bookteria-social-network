@@ -11,10 +11,19 @@ import com.recruitment.identity.entity.Users;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "id" , ignore = true)
+    @Mapping(target = "emailVerified",ignore = true)
+    @Mapping(target = "roles", ignore = true)
     Users toUser(UserCreationRequest request);
 
+    @Mapping(target = "emailVerified", ignore = true)
     UserResponse toUserResponse(Users users);
 
+    @Mapping(target = "id",ignore = true)
     @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    @Mapping(target = "emailVerified", ignore = true)
     void updateUser(@MappingTarget Users users, UserUpdateRequest request);
+
+
 }

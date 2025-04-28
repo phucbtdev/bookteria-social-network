@@ -1,6 +1,5 @@
 package com.recruitment.identity.dto.response;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 import lombok.*;
@@ -14,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 public class UserResponse {
     String id;
     String username;
-    LocalDate dob;
     boolean emailVerified;
     Set<RoleResponse> roles;
 }

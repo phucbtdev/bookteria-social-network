@@ -1,0 +1,76 @@
+package com.recruitment.candidate_service.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "candidate_package_subscriptions")
+public class CandidatePackageSubscription {
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+
+    UUID id;
+
+    @Column(name = "subscription_code", nullable = false, unique = true)
+    UUID subscriptionCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "candidate_id", nullable = false)
+    Candidate candidate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "package_id", nullable = false)
+    CandidatePackage candidatePackage;
+
+    @Column(name = "start_date", nullable = false)
+    LocalDate startDate;
+
+    @Column(name = "end_date", nullable = false)
+    LocalDate endDate;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    BigDecimal amountPaid;
+
+    @Builder.Default
+    @Column(name = "job_applications_used")
+    Integer jobApplicationsUsed = 0;
+
+    @Column(name = "payment_reference", length = 100)
+    String paymentReference;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    SubscriptionStatus status;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
+
+
+    public enum SubscriptionStatus {
+        ACTIVE, EXPIRED, CANCELLED, PENDING
+    }
+}
