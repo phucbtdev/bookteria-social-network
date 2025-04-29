@@ -57,7 +57,7 @@ public class CandidatePackageSubscription extends BaseEntity {
     SubscriptionStatus status;
 
     @Column(name = "cancelled_at")
-    private LocalDateTime cancelledAt;
+     LocalDateTime cancelledAt;
 
 
     public enum SubscriptionStatus {
