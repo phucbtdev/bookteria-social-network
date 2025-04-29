@@ -3,11 +3,8 @@ package com.recruitment.candidate_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -17,7 +14,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "candidate_packages")
-public class CandidatePackage {
+public class CandidatePackage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer  id;
@@ -55,12 +52,4 @@ public class CandidatePackage {
     @Builder.Default
     @Column(name = "is_active", nullable = false)
     Boolean isActive = false;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    LocalDateTime updatedAt;
 }

@@ -3,8 +3,6 @@ package com.recruitment.candidate_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "candidate_package_subscriptions")
-public class CandidatePackageSubscription {
+public class CandidatePackageSubscription extends BaseEntity {
     @Id
     @UuidGenerator
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
@@ -57,14 +55,6 @@ public class CandidatePackageSubscription {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     SubscriptionStatus status;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;

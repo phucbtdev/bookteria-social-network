@@ -16,7 +16,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "candidates")
-public class Candidate {
+public class Candidate extends BaseEntity {
 
     @Id
     @UuidGenerator

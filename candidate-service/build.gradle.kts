@@ -21,7 +21,7 @@ configurations {
 
 val mapstructVersion = "1.5.5.Final"
 val lombokMapstructBindingVersion = "0.2.0"
-
+val springCloudVersion = "2023.0.1"
 repositories {
 	mavenCentral()
 }
@@ -46,6 +46,12 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+	}
 }
 
 tasks.withType<Test> {

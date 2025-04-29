@@ -13,13 +13,12 @@ import java.lang.annotation.Target;
 @Mapper(componentModel = "spring")
 public interface CandidatePackageMapper {
     @Mapping(target = "id", ignore = true)
+    CandidatePackage toCandidatePackage(CandidatePackageCreationRequest request);
+
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    CandidatePackage toCandidatePackage(CandidatePackageCreationRequest request);
     CandidatePackageResponse toCandidatePackageResponse(CandidatePackage candidatePackage);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     void updateCandidatePackageFromRequest(@MappingTarget CandidatePackage candidatePackage, CandidatePackageUpdateRequest request);
 }
