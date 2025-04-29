@@ -3,6 +3,7 @@ package com.recruitment.employer_service.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.UuidGenerator;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "employers")
 public class Employer extends BaseEntity {
     @Id
     @UuidGenerator

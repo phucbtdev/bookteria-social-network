@@ -4,20 +4,20 @@ import com.recruitment.employer_service.dto.request.EmployerPackageCreationReque
 import com.recruitment.employer_service.dto.request.EmployerPackageUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerPackageResponse;
 import com.recruitment.employer_service.entity.EmployerPackage;
+import com.recruitment.employer_service.exception.AppException;
+import com.recruitment.employer_service.exception.ErrorCode;
 import com.recruitment.employer_service.mapper.EmployerPackageMapper;
 import com.recruitment.employer_service.repository.EmployerPackageRepository;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE ,makeFinal = true)
 public class EmployerPackageService {
 
     EmployerPackageMapper employerPackageMapper;
@@ -28,7 +28,7 @@ public class EmployerPackageService {
     }
 
     public EmployerPackageResponse updateEmployerPackage(Integer id, EmployerPackageUpdateRequest request) {
-        EmployerPackage employerPackage = employerPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Employer package not found"));
+        EmployerPackage employerPackage = employerPackageRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         employerPackageMapper.updateEntity(employerPackage, request);
         return employerPackageMapper.toResponse(employerPackageRepository.save(employerPackage));
     }

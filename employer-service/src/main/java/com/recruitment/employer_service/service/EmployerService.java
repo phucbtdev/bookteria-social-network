@@ -1,13 +1,14 @@
 package com.recruitment.employer_service.service;
 
+import com.recruitment.employer_service.exception.AppException;
+import com.recruitment.employer_service.exception.ErrorCode;
 import com.recruitment.employer_service.repository.EmployerRepository;
 import com.recruitment.employer_service.dto.request.EmployerCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.entity.Employer;
 import com.recruitment.employer_service.mapper.EmployerMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@RequiredArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE ,makeFinal = true)
 public class EmployerService {
     EmployerRepository employerRepository;
     EmployerMapper employerMapper;
@@ -28,7 +28,7 @@ public class EmployerService {
 
     public EmployerResponse updateEmployer(UUID id, EmployerUpdateRequest request) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         employerMapper.updateEmployerFromRequest(employer, request);
         return employerMapper.toEmployerResponse(employerRepository.save(employer));
     }
