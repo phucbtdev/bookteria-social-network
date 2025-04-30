@@ -1,11 +1,11 @@
-package com.recruitment.job_service.dto.response;
-
+package com.recruitment.job_service.dto.request;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,40 +14,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class JobResponse {
-    UUID id;
-
-    UUID employerId;
-
-    String employerName;
-
-    String companyName;
-
+public class JobUpdateRequest {
     String title;
-
-    String slug;
 
     String description;
 
     UUID industryId;
 
-    String industryName;
-
     UUID jobLevelId;
-
-    String jobLevelName;
 
     UUID experienceLevelId;
 
-    String experienceLevelName;
-
     UUID salaryRangeId;
 
-    String salaryRangeDisplay;
-
     UUID workTypeId;
-
-    String workTypeName;
 
     Integer numberOfPositions;
 
@@ -59,8 +39,12 @@ public class JobResponse {
 
     String address;
 
+    @DecimalMin(value = "-90.0", message = "Latitude must be greater than or equal to -90")
+    @DecimalMax(value = "90.0", message = "Latitude must be less than or equal to 90")
     BigDecimal latitude;
 
+    @DecimalMin(value = "-180.0", message = "Longitude must be greater than or equal to -180")
+    @DecimalMax(value = "180.0", message = "Longitude must be less than or equal to 180")
     BigDecimal longitude;
 
     LocalDate applicationDeadline;
@@ -70,10 +54,6 @@ public class JobResponse {
     LocalDate endDate;
 
     JobPostStatus status;
-
-    LocalDateTime createdAt;
-
-    LocalDateTime updatedAt;
 
     public enum GenderRequirement {
         ANY, MALE, FEMALE

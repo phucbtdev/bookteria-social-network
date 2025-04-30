@@ -5,7 +5,6 @@ import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.dto.response.PageResponse;
 import com.recruitment.job_service.dto.response.UserProfileResponse;
 import com.recruitment.job_service.entity.Job;
-import com.recruitment.job_service.entity.UserProfile;
 import com.recruitment.job_service.mapper.JobMapper;
 import com.recruitment.job_service.repository.JobRepository;
 import com.recruitment.job_service.repository.httpclient.ProfileFeignRepository;
@@ -21,33 +20,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobService {
-
     JobRepository jobRepository;
     JobMapper jobMapper;
     ProfileFeignRepository profileFeignRepository;
 
-   public JobResponse createJob(JobCreationRequest jobCreationRequest) {
+   public JobResponse createJob(JobCreationRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Job job = Job.builder()
-                .userId(authentication.getName())
-                .content(jobCreationRequest.getContent())
-                .createdDate(Instant.now())
-                .modifiedDate(Instant.now())
-                .build();
-
-        var user =  jobRepository.save(job);
-        return  jobMapper.entityToJobResponse(user);
+        Job job = jobMapper.toEntity(request);
+        job.setEmployerId(UUID.fromString(authentication.getName()));
+        return  jobMapper.toResponse(jobRepository.save(job));
    }
 
    public PageResponse<JobResponse> getAllJobPosts(int page, int size, String sortField, String sortDirection) {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       String userId =  authentication.getName();
+       String employerId =  authentication.getName();
 
        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                Sort.by(sortField).ascending() : Sort.by(sortField).descending();
@@ -55,17 +48,17 @@ public class JobService {
 
        UserProfileResponse userProfileResponse =  null;
        try {
-           userProfileResponse  = profileFeignRepository.getUserProfile(userId);
+           userProfileResponse  = profileFeignRepository.getUserProfile(employerId);
        } catch (Exception e) {
            log.error("Error fetching user profile: {}", e.getMessage());
        }
 
        String username = userProfileResponse != null ? userProfileResponse.getFirstName() : null;
 
-       var pageData = jobRepository.findAllByUserId(userId,pageable);
+       var pageData = jobRepository.findAllByUserId(employerId,pageable);
        var postList = pageData.getContent().stream().map(job -> {
-           JobResponse jobResponse = jobMapper.entityToJobResponse(job);
-           jobResponse.setUsername(username);
+           JobResponse jobResponse = jobMapper.toResponse(job);
+//           jobResponse.setUsername(username);
            return jobResponse;
        }).toList();
 
