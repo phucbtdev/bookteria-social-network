@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProfileCreationRequest {
+public class EmployerCreationRequest {
     String userId;
     String firstName;
     String lastName;

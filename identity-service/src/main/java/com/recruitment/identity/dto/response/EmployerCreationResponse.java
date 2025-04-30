@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProfileCreationResponse {
+public class EmployerCreationResponse {
     String id;
     String userId;
     String username;

@@ -6,6 +6,8 @@ import java.util.List;
 import com.recruitment.event.dto.NotificationEvent;
 import com.recruitment.identity.entity.Roles;
 import com.recruitment.identity.entity.Users;
+import com.recruitment.identity.mapper.EmployerMapper;
+import com.recruitment.identity.repository.httpclient.EmployerFeignClientRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,11 +20,9 @@ import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
 import com.recruitment.identity.exception.AppException;
 import com.recruitment.identity.exception.ErrorCode;
-import com.recruitment.identity.mapper.ProfileMapper;
 import com.recruitment.identity.mapper.UserMapper;
 import com.recruitment.identity.repository.RoleRepository;
 import com.recruitment.identity.repository.UserRepository;
-import com.recruitment.identity.repository.httpclient.ProfileClient;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
+
     UserMapper userMapper;
-    ProfileMapper profileMapper;
+    EmployerMapper employerMapper;
+
     PasswordEncoder passwordEncoder;
-    ProfileClient profileClient;
+    EmployerFeignClientRepository employerFeignClientRepository;
+
     KafkaTemplate<String,Object> kafkaTemplate;
 
     public UserResponse createUser(UserCreationRequest request) {
@@ -55,9 +58,9 @@ public class UserService {
         users.setRoles(roles);
         users = userRepository.save(users);
 
-        var profile = profileMapper.toProfileCreationRequest(request);
-        profile.setUserId(users.getId());
-        profileClient.createProfile(profile);
+        var employer = employerMapper.toEmployerCreationRequest(request);
+        employer.setUserId(users.getId());
+        employerFeignClientRepository.createEmployer(employer);
 
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .channel("Email")
