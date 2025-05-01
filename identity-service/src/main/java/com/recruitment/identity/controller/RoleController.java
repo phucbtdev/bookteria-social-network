@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.recruitment.identity.dto.request.ApiResponse;
+import com.recruitment.identity.dto.ApiResponse;
 import com.recruitment.identity.dto.request.RoleRequest;
 import com.recruitment.identity.dto.response.RoleResponse;
 import com.recruitment.identity.service.RoleService;
@@ -23,7 +23,9 @@ public class RoleController {
     RoleService roleService;
 
     @PostMapping
-    ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
+    ApiResponse<RoleResponse> create(
+            @RequestBody RoleRequest request
+    ) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleService.create(request))
                 .build();

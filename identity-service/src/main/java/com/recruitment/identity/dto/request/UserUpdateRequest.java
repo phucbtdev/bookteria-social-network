@@ -14,10 +14,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-    String password;
-    String firstName;
-    String lastName;
     String email;
+    String password;
+    String fullName;
     @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dob;
 

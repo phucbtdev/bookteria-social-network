@@ -4,12 +4,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.recruitment.event.dto.NotificationEvent;
+import com.recruitment.identity.dto.request.EmployerCreationRequest;
+import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import com.recruitment.identity.entity.Roles;
 import com.recruitment.identity.entity.Users;
 import com.recruitment.identity.mapper.EmployerMapper;
 import com.recruitment.identity.repository.httpclient.EmployerFeignClientRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,49 +45,44 @@ public class UserService {
     EmployerMapper employerMapper;
 
     PasswordEncoder passwordEncoder;
+
     EmployerFeignClientRepository employerFeignClientRepository;
 
-    KafkaTemplate<String,Object> kafkaTemplate;
-
-    public UserResponse createUser(UserCreationRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
-
-        Users users = userMapper.toUser(request);
-        users.setPassword(passwordEncoder.encode(request.getPassword()));
+    public UserResponse createAccountEmployer(
+            EmployerRegisterRequest request
+    ) {
+        if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        Users users = Users.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
 
         HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
-
         users.setRoles(roles);
         users = userRepository.save(users);
 
-        var employer = employerMapper.toEmployerCreationRequest(request);
-        employer.setUserId(users.getId());
-        employerFeignClientRepository.createEmployer(employer);
-
-        NotificationEvent notificationEvent = NotificationEvent.builder()
-                .channel("Email")
-                .recipient(request.getEmail())
-                .subject("Welcome to PhucbtDev")
-                .body("Hello" + request.getUsername())
+        EmployerCreationRequest employer = EmployerCreationRequest.builder()
+                .userId(users.getId())
+                .fullName(request.getFullName())
+                .phone(request.getPhone())
+                .companyName(request.getCompanyName())
+                .companyCity(request.getCompanyCity())
                 .build();
-        log.info("Users info: {}", users);
-        log.info("Notification info: {}",notificationEvent);
-
-        kafkaTemplate.send("notification-delivery1",
-                notificationEvent
-        );
+         log.info("Employer creation request: {}", employer);
+        employerFeignClientRepository.createEmployer(employer);
 
         return userMapper.toUserResponse(users);
     }
 
     public UserResponse getMyInfo() {
-        var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
-
-        Users users = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        return userMapper.toUserResponse(users);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userMapper.toUserResponse(
+                userRepository.findById(authentication.getName())
+                        .orElseThrow(
+                                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+                        )
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")

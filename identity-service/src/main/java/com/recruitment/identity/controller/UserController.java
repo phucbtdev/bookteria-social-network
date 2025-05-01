@@ -2,12 +2,12 @@ package com.recruitment.identity.controller;
 
 import java.util.List;
 
+import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.recruitment.identity.dto.request.ApiResponse;
-import com.recruitment.identity.dto.request.UserCreationRequest;
+import com.recruitment.identity.dto.ApiResponse;
 import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
 import com.recruitment.identity.service.UserService;
@@ -26,9 +26,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+    ApiResponse<UserResponse> createUser(
+            @RequestBody @Valid EmployerRegisterRequest request
+    ) {
         return ApiResponse.<UserResponse>builder()
-                .result(userService.createUser(request))
+                .result(userService.createAccountEmployer(request))
                 .build();
     }
 
@@ -40,7 +42,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
+    ApiResponse<UserResponse> getUser(
+            @PathVariable("userId") String userId
+    ) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
                 .build();
@@ -54,13 +58,20 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable String userId) {
+    ApiResponse<String> deleteUser(
+            @PathVariable String userId
+    ) {
         userService.deleteUser(userId);
-        return ApiResponse.<String>builder().result("Users has been deleted").build();
+        return ApiResponse.<String>builder()
+                .result("Users has been deleted")
+                .build();
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(
+            @PathVariable String userId,
+            @RequestBody UserUpdateRequest request
+    ) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();

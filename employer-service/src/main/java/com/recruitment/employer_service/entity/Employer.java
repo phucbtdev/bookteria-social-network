@@ -33,12 +33,15 @@ public class Employer extends BaseEntity {
     @Column(name = "package_expiry_date")
     LocalDate packageExpiryDate;
 
+    String fullName;
+
+    String phone;
 
     @Column(name = "company_name", length = 255, nullable = false)
     String companyName;
 
-    @Column(name = "company_address", columnDefinition = "TEXT")
-    String companyAddress;
+    @Column(name = "company_city", columnDefinition = "TEXT")
+    String companyCity;
 
     @Column(name = "company_website", length = 255)
     String companyWebsite;

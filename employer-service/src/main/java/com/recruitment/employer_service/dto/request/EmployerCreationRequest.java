@@ -21,11 +21,17 @@ public class EmployerCreationRequest {
 
     LocalDate packageExpiryDate;
 
+    String fullName;
+
     @NotBlank(message = "Company name is required")
     @Size(max = 255, message = "Company name must be less than 255 characters")
     String companyName;
 
-    String companyAddress;
+    @NotBlank(message = "COMPANY_ADDRESS_IS_REQUIRED")
+    String companyCity;
+
+    @NotBlank(message = "PHONE_IS_REQUIRED")
+    String phone;
 
     @Size(max = 255, message = "Website URL must be less than 255 characters")
     String companyWebsite;
@@ -33,12 +39,11 @@ public class EmployerCreationRequest {
     String companyLogoUrl;
 
     @Size(max = 50, message = "Company size must be less than 50 characters")
-    String companySize; // Small, Medium, Large
+    String companySize;
 
     @Size(max = 255, message = "Industry must be less than 255 characters")
     String industry;
 
     String companyDescription;
-
 
 }

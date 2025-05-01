@@ -2,7 +2,7 @@ package com.recruitment.identity.repository.httpclient;
 
 
 import com.recruitment.identity.configuration.FeignConfig;
-import com.recruitment.identity.dto.request.ApiResponse;
+import com.recruitment.identity.dto.ApiResponse;
 import com.recruitment.identity.dto.request.EmployerCreationRequest;
 import com.recruitment.identity.dto.response.EmployerCreationResponse;
 import org.springframework.cloud.openfeign.FeignClient;

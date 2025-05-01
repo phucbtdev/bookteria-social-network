@@ -18,7 +18,7 @@ public class EmployerResponse {
     Integer currentPackageId;
     LocalDate packageExpiryDate;
     String companyName;
-    String companyAddress;
+    String companyCity;
     String companyWebsite;
     String companyLogoUrl;
     String companySize;

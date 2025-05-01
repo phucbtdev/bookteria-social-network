@@ -17,10 +17,14 @@ public class EmployerUpdateRequest {
 
     LocalDate packageExpiryDate;
 
+    String fullName;
+
+    String phone;
+
     @Size(max = 255, message = "Company name must be less than 255 characters")
     String companyName;
 
-    String companyAddress;
+    String companyCity;
 
     @Size(max = 255, message = "Website URL must be less than 255 characters")
     String companyWebsite;

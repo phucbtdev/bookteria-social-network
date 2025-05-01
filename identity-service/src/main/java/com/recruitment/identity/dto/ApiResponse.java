@@ -1,4 +1,4 @@
-package com.recruitment.identity.dto.request;
+package com.recruitment.identity.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

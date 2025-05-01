@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 import com.recruitment.identity.entity.Roles;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +28,7 @@ public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
     @NonFinal
-    static final String ADMIN_USER_NAME = "admin";
+    static final String ADMIN_EMAIL = "phucbuitrong.dev@gmail.com";
 
     @NonFinal
     static final String ADMIN_PASSWORD = "admin";
@@ -38,7 +37,7 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         log.info("Initializing application.....");
         return args -> {
-            if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
+            if (userRepository.findByEmail(ADMIN_EMAIL).isEmpty()) {
                 roleRepository.save(Roles.builder()
                         .name(PredefinedRole.USER_ROLE)
                         .description("Users role")
@@ -53,10 +52,12 @@ public class ApplicationInitConfig {
                 roles.add(adminRoles);
 
                 Users users = Users.builder()
-                        .username(ADMIN_USER_NAME)
+                        .email(ADMIN_EMAIL)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                        .emailVerified(true)
                         .roles(roles)
                         .build();
+
 
                 userRepository.save(users);
                 log.warn("admin users has been created with default password: admin, please change it");
