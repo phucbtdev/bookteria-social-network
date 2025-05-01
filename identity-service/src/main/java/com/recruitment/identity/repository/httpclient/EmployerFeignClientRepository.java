@@ -2,6 +2,7 @@ package com.recruitment.identity.repository.httpclient;
 
 
 import com.recruitment.identity.configuration.FeignConfig;
+import com.recruitment.identity.dto.request.ApiResponse;
 import com.recruitment.identity.dto.request.EmployerCreationRequest;
 import com.recruitment.identity.dto.response.EmployerCreationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,5 +17,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface EmployerFeignClientRepository {
     @PostMapping(value = "/internal/employer", produces = MediaType.APPLICATION_JSON_VALUE)
-    EmployerCreationResponse createEmployer(@RequestBody EmployerCreationRequest request);
+    ApiResponse<EmployerCreationResponse>  createEmployer(@RequestBody EmployerCreationRequest request);
 }
