@@ -2,14 +2,15 @@ package com.recruitment.identity.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import com.recruitment.event.dto.NotificationEvent;
-import com.recruitment.identity.dto.request.EmployerCreationRequest;
+import com.recruitment.event.dto.EmployerCreationFailedEvent;
+import com.recruitment.event.dto.EmployerCreationRequest;
 import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import com.recruitment.identity.entity.Roles;
 import com.recruitment.identity.entity.Users;
-import com.recruitment.identity.mapper.EmployerMapper;
-import com.recruitment.identity.repository.httpclient.EmployerFeignClientRepository;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.recruitment.identity.constant.PredefinedRole;
-import com.recruitment.identity.dto.request.UserCreationRequest;
 import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
 import com.recruitment.identity.exception.AppException;
@@ -42,13 +42,12 @@ public class UserService {
     RoleRepository roleRepository;
 
     UserMapper userMapper;
-    EmployerMapper employerMapper;
 
     PasswordEncoder passwordEncoder;
 
-    EmployerFeignClientRepository employerFeignClientRepository;
+    KafkaTemplate<String,Object> kafkaTemplate;
 
-    public UserResponse createAccountEmployer(
+    public void createAccountEmployer(
             EmployerRegisterRequest request
     ) {
         if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
@@ -60,25 +59,42 @@ public class UserService {
         HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         users.setRoles(roles);
-        users = userRepository.save(users);
+        userRepository.save(users);
 
-        EmployerCreationRequest employer = EmployerCreationRequest.builder()
+        EmployerCreationRequest employerCreationRequest = EmployerCreationRequest.builder()
                 .userId(users.getId())
                 .fullName(request.getFullName())
                 .phone(request.getPhone())
                 .companyName(request.getCompanyName())
                 .companyCity(request.getCompanyCity())
                 .build();
-         log.info("Employer creation request: {}", employer);
-        employerFeignClientRepository.createEmployer(employer);
+        log.info("Sending employer creation request: {}", employerCreationRequest);
+        kafkaTemplate.send("user-created", employerCreationRequest);
+    }
 
-        return userMapper.toUserResponse(users);
+    @KafkaListener(topics = "employer-creation-success", groupId = "identity-group")
+    public void handleEmployerCreationSuccess(Map<String, Object> event) {
+        log.info("Received employer creation success event: {}", event);
+        UUID userId = UUID.fromString((String) event.get("userId"));
+
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setActive(true);
+            userRepository.save(user);
+        });
+        log.info("✅ Employer created successfully. User activated: {}", userId);
+    }
+
+    @KafkaListener(topics = "employer-creation-failed", groupId = "identity-group")
+    public void handleEmployerCreationFailed(Map<String, Object> event) {
+        log.info("Received employer creation failed event: {}", event);
+        UUID userId = UUID.fromString((String) event.get("userId"));
+        userRepository.deleteById(userId);
     }
 
     public UserResponse getMyInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userMapper.toUserResponse(
-                userRepository.findById(authentication.getName())
+                userRepository.findById(UUID.fromString(authentication.getName()))
                         .orElseThrow(
                                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
                         )
@@ -86,7 +102,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+    public UserResponse updateUser(UUID userId, UserUpdateRequest request) {
         Users users = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(users, request);
@@ -99,7 +115,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(String userId) {
+    public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
     }
 
@@ -109,7 +125,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse getUser(String id) {
+    public UserResponse getUser(UUID id) {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }

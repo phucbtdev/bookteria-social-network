@@ -30,6 +30,9 @@ public class Users {
     @Column(name = "email_verified", nullable = false)
     boolean emailVerified;
 
+    @Builder.Default
+    boolean active = false;
+
     @ManyToMany
     Set<Roles> roles;
 }

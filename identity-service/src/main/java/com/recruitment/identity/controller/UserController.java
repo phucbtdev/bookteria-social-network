@@ -1,6 +1,7 @@
 package com.recruitment.identity.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import jakarta.validation.Valid;
@@ -26,11 +27,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    ApiResponse<UserResponse> createUser(
+    ApiResponse createUser(
             @RequestBody @Valid EmployerRegisterRequest request
     ) {
-        return ApiResponse.<UserResponse>builder()
-                .result(userService.createAccountEmployer(request))
+        userService.createAccountEmployer(request);
+        return ApiResponse.builder()
                 .build();
     }
 
@@ -43,7 +44,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(
-            @PathVariable("userId") String userId
+            @PathVariable("userId") UUID userId
     ) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
@@ -59,7 +60,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     ApiResponse<String> deleteUser(
-            @PathVariable String userId
+            @PathVariable UUID userId
     ) {
         userService.deleteUser(userId);
         return ApiResponse.<String>builder()
@@ -69,7 +70,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable String userId,
+            @PathVariable UUID userId,
             @RequestBody UserUpdateRequest request
     ) {
         return ApiResponse.<UserResponse>builder()

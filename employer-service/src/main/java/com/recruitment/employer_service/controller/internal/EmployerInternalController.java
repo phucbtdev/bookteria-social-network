@@ -1,9 +1,9 @@
 package com.recruitment.employer_service.controller.internal;
 
-import com.recruitment.employer_service.dto.request.EmployerCreationRequest;
 import com.recruitment.employer_service.dto.response.ApiResponse;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.service.EmployerService;
+import com.recruitment.event.dto.EmployerCreationRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

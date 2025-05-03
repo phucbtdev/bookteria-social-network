@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 	implementation("org.mapstruct:mapstruct:$mapstructVersion")
+	implementation("org.springframework.kafka:spring-kafka:3.3.4")
 
 	runtimeOnly("org.postgresql:postgresql")
 

@@ -14,6 +14,7 @@ public interface UserMapper {
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "emailVerified",ignore = true)
     @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "active", ignore = true)
     Users toUser(UserCreationRequest request);
 
     @Mapping(target = "emailVerified", ignore = true)
@@ -22,6 +23,7 @@ public interface UserMapper {
     @Mapping(target = "id",ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "emailVerified", ignore = true)
+    @Mapping(target = "active", ignore = true)
     void updateUser(@MappingTarget Users users, UserUpdateRequest request);
 
 
