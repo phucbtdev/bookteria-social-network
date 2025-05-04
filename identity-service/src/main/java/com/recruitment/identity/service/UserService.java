@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.recruitment.event.dto.EmployerCreationFailedEvent;
 import com.recruitment.event.dto.EmployerCreationRequest;
 import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import com.recruitment.identity.entity.Roles;

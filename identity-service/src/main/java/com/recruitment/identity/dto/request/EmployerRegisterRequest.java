@@ -13,24 +13,24 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployerRegisterRequest {
 
-    @Email(message = "INVALID_EMAIL")
-    @NotBlank(message = "EMAIL_IS_REQUIRED")
+    @Email(message = "Email không hợp lệ")
+    @NotBlank(message = "Email không được để trống")
     String email;
 
-    @Size(min = 6, message = "INVALID_PASSWORD")
+    @Size(min = 6, message = "Password phải có ít nhất {min} ký tự")
     String password;
 
-    @NotBlank(message = "FULLNAME_IS_REQUIRED")
+    @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
-    @NotBlank(message = "PHONE_IS_REQUIRED")
+    @NotBlank(message = "Số điện thoại không được để trống")
     String phone;
 
-    @NotBlank(message = "Company name is required")
-    @Size(max = 255, message = "Company name must be less than 255 characters")
+    @NotBlank(message = "Tên công ty không được để trống")
+    @Size(max = 255, message = "Tên công ty không được quá {max} ký tự")
     String companyName;
 
-    @NotBlank(message = "COMPANYNAME_IS_REQUIRED")
+    @NotBlank(message = "Thành phố công ty không được để trống")
     String companyCity;
 
 }
