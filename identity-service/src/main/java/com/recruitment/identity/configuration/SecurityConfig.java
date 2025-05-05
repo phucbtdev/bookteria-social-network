@@ -26,6 +26,7 @@ public class SecurityConfig {
             "/swagger/**",
             "/v3/**",
             "/employer/register",
+            "/candidate/register",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

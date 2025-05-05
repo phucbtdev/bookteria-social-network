@@ -1,4 +1,4 @@
-package com.recruitment.candidate_service.dto.request;
+package com.recruitment.event.dto;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

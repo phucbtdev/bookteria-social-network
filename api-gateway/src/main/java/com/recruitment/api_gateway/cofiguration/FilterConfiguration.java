@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -47,6 +46,7 @@ public class FilterConfiguration implements GlobalFilter, Ordered {
             "/identity/users/register",
             "/notification/send/mail",
             "/identity/employer/register",
+            "/identity/candidate/register",
     };
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

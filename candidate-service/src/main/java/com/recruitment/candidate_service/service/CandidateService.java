@@ -1,6 +1,6 @@
 package com.recruitment.candidate_service.service;
 
-import com.recruitment.candidate_service.dto.request.CandidateCreationRequest;
+import com.recruitment.event.dto.CandidateCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.entity.Candidate;
@@ -12,11 +12,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,6 +28,24 @@ public class CandidateService {
 
     CandidateMapper candidateMapper;
     CandidateRepository candidateRepository;
+    KafkaTemplate<String, Object> kafkaTemplate;
+
+    @KafkaListener(topics = "candidate-registration")
+    public void createCandidateFromIdentity(CandidateCreationRequest creationRequest){
+        try {
+            Candidate candidate = candidateMapper.toCandidate(creationRequest);
+            candidateRepository.save(candidate);
+            kafkaTemplate.send("candidate-creation-success", Map.of(
+                    "userId", creationRequest.getUserId().toString(),
+                    "candidateId", candidate.getId().toString()
+            ));
+        } catch (Exception e) {
+            kafkaTemplate.send("candidate-creation-failed", Map.of(
+                    "userId", creationRequest.getUserId(),
+                    "reason", "Exception: " + e.getMessage()
+            ) );
+        }
+    }
 
     public CandidateResponse createCandidate(CandidateCreationRequest request){
         Candidate candidate = candidateMapper.toCandidate(request);

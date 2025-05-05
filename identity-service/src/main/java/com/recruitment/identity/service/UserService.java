@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.recruitment.event.dto.CandidateCreationRequest;
 import com.recruitment.event.dto.EmployerCreationRequest;
+import com.recruitment.identity.dto.request.CandidateRegisterRequest;
 import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import com.recruitment.identity.entity.Roles;
 import com.recruitment.identity.entity.Users;
@@ -39,12 +41,32 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
-
     UserMapper userMapper;
-
     PasswordEncoder passwordEncoder;
-
     KafkaTemplate<String,Object> kafkaTemplate;
+
+    public void createAccountCandidate(
+            CandidateRegisterRequest request
+    ){
+        if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        Users users = Users.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+
+        HashSet<Roles> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.CANDIDATE_ROLE).ifPresent(roles::add);
+        users.setRoles(roles);
+        userRepository.save(users);
+        log.info("Candidate created successfully: {}", users);
+
+        CandidateCreationRequest creationRequest = CandidateCreationRequest.builder()
+                .userId(users.getId())
+                .fullName(request.getFullName())
+                .build();
+
+        kafkaTemplate.send("candidate-registration", creationRequest);
+    }
 
     public void createAccountEmployer(
             EmployerRegisterRequest request
@@ -56,7 +78,7 @@ public class UserService {
                 .build();
 
         HashSet<Roles> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        roleRepository.findById(PredefinedRole.EMPLOYER_ROLE).ifPresent(roles::add);
         users.setRoles(roles);
         userRepository.save(users);
 
@@ -68,7 +90,7 @@ public class UserService {
                 .companyCity(request.getCompanyCity())
                 .build();
         log.info("Sending employer creation request: {}", employerCreationRequest);
-        kafkaTemplate.send("user-created", employerCreationRequest);
+        kafkaTemplate.send("employer-registration", employerCreationRequest);
     }
 
     @KafkaListener(topics = "employer-creation-success", groupId = "identity-group")
@@ -86,6 +108,25 @@ public class UserService {
     @KafkaListener(topics = "employer-creation-failed", groupId = "identity-group")
     public void handleEmployerCreationFailed(Map<String, Object> event) {
         log.info("Received employer creation failed event: {}", event);
+        UUID userId = UUID.fromString((String) event.get("userId"));
+        userRepository.deleteById(userId);
+    }
+
+    @KafkaListener(topics = "candidate-creation-success", groupId = "identity-group")
+    public void handleCandidateCreationSuccess(Map<String, Object> event) {
+        log.info("Received candidate creation success event: {}", event);
+        UUID userId = UUID.fromString((String) event.get("userId"));
+
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setActive(true);
+            userRepository.save(user);
+        });
+        log.info("✅ Candidate created successfully. User activated: {}", userId);
+    }
+
+    @KafkaListener(topics = "candidate-creation-failed", groupId = "identity-group")
+    public void handleCandidateCreationFailed(Map<String, Object> event) {
+        log.info("Received candidate creation failed event: {}", event);
         UUID userId = UUID.fromString((String) event.get("userId"));
         userRepository.deleteById(userId);
     }

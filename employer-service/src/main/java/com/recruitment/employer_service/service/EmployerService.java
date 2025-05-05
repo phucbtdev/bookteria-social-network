@@ -32,7 +32,7 @@ public class EmployerService {
         return employerMapper.toEmployerResponse(employerRepository.save(employerMapper.toEmployer(request)));
     }
 
-    @KafkaListener(topics = "user-created")
+    @KafkaListener(topics = "employer-registration")
     public void createEmployerFromIdentity(EmployerCreationRequest creationRequest){
         log.info("Received user creation event: {}", creationRequest);
         try {

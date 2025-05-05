@@ -1,6 +1,6 @@
 package com.recruitment.candidate_service.mapper;
 
-import com.recruitment.candidate_service.dto.request.CandidateCreationRequest;
+import com.recruitment.event.dto.CandidateCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.entity.Candidate;
