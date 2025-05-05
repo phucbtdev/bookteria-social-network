@@ -1,5 +1,6 @@
 package com.recruitment.identity.dto.request;
 
+import com.recruitment.identity.validator.PasswordMatches;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@PasswordMatches
 public class EmployerRegisterRequest {
 
     @Email(message = "Email không hợp lệ")
@@ -23,6 +25,9 @@ public class EmployerRegisterRequest {
             message = "Password phải chứa ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"
     )
     String password;
+
+    @NotBlank(message = "Mật khẩu xác nhận không được để trống")
+    String confirmPassword;
 
     @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
