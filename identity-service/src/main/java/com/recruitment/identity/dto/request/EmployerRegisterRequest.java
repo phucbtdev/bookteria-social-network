@@ -2,6 +2,7 @@ package com.recruitment.identity.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,13 +18,20 @@ public class EmployerRegisterRequest {
     @NotBlank(message = "Email không được để trống")
     String email;
 
-    @Size(min = 6, message = "Password phải có ít nhất {min} ký tự")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "Password phải chứa ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"
+    )
     String password;
 
     @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
     @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(
+            regexp = "^(\\+84|0)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$",
+            message = "Số điện thoại không hợp lệ"
+    )
     String phone;
 
     @NotBlank(message = "Tên công ty không được để trống")

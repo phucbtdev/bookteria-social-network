@@ -22,8 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private static final String MIN_ATTRIBUTE = "min";
-
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<Object>> handlingRuntimeException(RuntimeException exception) {
         log.error("Exception: ", exception);
