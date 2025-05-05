@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+	implementation(project(":common"))
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -36,6 +37,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 	implementation("org.mapstruct:mapstruct:$mapstructVersion")
 	implementation("org.springframework.kafka:spring-kafka:3.3.4")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	runtimeOnly("org.postgresql:postgresql")
 

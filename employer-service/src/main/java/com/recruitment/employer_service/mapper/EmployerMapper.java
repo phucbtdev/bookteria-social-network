@@ -1,9 +1,9 @@
 package com.recruitment.employer_service.mapper;
 
+import com.recruitment.common.dto.request.EmployerCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.entity.Employer;
-import com.recruitment.event.dto.EmployerCreationRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

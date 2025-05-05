@@ -1,12 +1,13 @@
-package com.recruitment.event.dto;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+package com.recruitment.common.dto.request;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor

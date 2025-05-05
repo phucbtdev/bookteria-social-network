@@ -1,5 +1,6 @@
 package com.recruitment.employer_service.service;
 
+import com.recruitment.common.dto.request.EmployerCreationRequest;
 import com.recruitment.employer_service.exception.AppException;
 import com.recruitment.employer_service.exception.ErrorCode;
 import com.recruitment.employer_service.repository.EmployerRepository;
@@ -7,7 +8,6 @@ import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.entity.Employer;
 import com.recruitment.employer_service.mapper.EmployerMapper;
-import com.recruitment.event.dto.EmployerCreationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,10 @@
 package com.recruitment.employer_service.controller;
 
+import com.recruitment.common.dto.request.EmployerCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.ApiResponse;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.service.EmployerService;
-import com.recruitment.event.dto.EmployerCreationRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
