@@ -17,7 +17,6 @@ public interface EmployerPackageMapper {
     @Mapping(target = "id", ignore = true)
     EmployerPackage toEntity(EmployerPackageUpdateRequest request);
 
-    @Mapping(target = "id", ignore = true)
     EmployerPackageResponse toResponse(EmployerPackage employerPackage);
 
     @Mapping(target = "id", ignore = true)

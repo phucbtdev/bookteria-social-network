@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/employer-package")
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerPackageController {
 
     EmployerPackageService employerPackageService;

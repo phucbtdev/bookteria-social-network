@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "employer_packages")
 public class EmployerPackage extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @Column(name = "name", length = 100, nullable = false, unique = true)
