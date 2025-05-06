@@ -21,16 +21,17 @@ public class EmployerCreationRequest {
 
     LocalDate packageExpiryDate;
 
+    @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
-    @NotBlank(message = "Company name is required")
-    @Size(max = 255, message = "Company name must be less than 255 characters")
+    @NotBlank(message = "Tên công ty không được để trống")
+    @Size(max = 255, message = "Tên công ty không được quá {max} ký tự")
     String companyName;
 
-    @NotBlank(message = "COMPANY_ADDRESS_IS_REQUIRED")
+    @NotBlank(message = "Thành phố công ty không được để trống")
     String companyCity;
 
-    @NotBlank(message = "PHONE_IS_REQUIRED")
+    @NotBlank(message = "Số điện thoại là bắt buộc")
     String phone;
 
     @Size(max = 255, message = "Website URL must be less than 255 characters")

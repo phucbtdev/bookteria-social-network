@@ -26,15 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
     UserService userService;
 
-    @PostMapping("/register")
-    ApiResponse createUser(
-            @RequestBody @Valid EmployerRegisterRequest request
-    ) {
-        userService.createAccountEmployer(request);
-        return ApiResponse.builder()
-                .build();
-    }
-
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()

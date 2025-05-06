@@ -49,14 +49,15 @@ public class UserService {
             CandidateRegisterRequest request
     ){
         if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
-        Users users = Users.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
 
         HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.CANDIDATE_ROLE).ifPresent(roles::add);
-        users.setRoles(roles);
+
+        Users users = Users.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roles)
+                .build();
         userRepository.save(users);
         log.info("Candidate created successfully: {}", users);
 
@@ -72,14 +73,13 @@ public class UserService {
             EmployerRegisterRequest request
     ) {
         if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        HashSet<Roles> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.EMPLOYER_ROLE).ifPresent(roles::add);
         Users users = Users.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roles)
                 .build();
-
-        HashSet<Roles> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.EMPLOYER_ROLE).ifPresent(roles::add);
-        users.setRoles(roles);
         userRepository.save(users);
 
         EmployerCreationRequest employerCreationRequest = EmployerCreationRequest.builder()

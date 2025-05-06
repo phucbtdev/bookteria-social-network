@@ -24,8 +24,7 @@ public class CandidateCreationRequest {
     @FutureOrPresent
     LocalDate packageExpiryDate;
 
-    @NotNull
-    @NotBlank(message = "EMAIL_IS_REQUIRED")
+    @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
     @URL

@@ -1,10 +1,10 @@
 package com.recruitment.candidate_service.controller;
 
-import com.recruitment.event.dto.CandidateCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
 import com.recruitment.candidate_service.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.service.CandidateService;
+import com.recruitment.common.dto.request.CandidateCreationRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

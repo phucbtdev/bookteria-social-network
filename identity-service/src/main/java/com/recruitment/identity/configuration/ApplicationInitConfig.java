@@ -43,6 +43,11 @@ public class ApplicationInitConfig {
                         .description("Candidate role")
                         .build());
 
+                roleRepository.save(Roles.builder()
+                        .name(PredefinedRole.EMPLOYER_ROLE)
+                        .description("Employer role")
+                        .build());
+
                 Roles adminRoles = roleRepository.save(Roles.builder()
                         .name(PredefinedRole.ADMIN_ROLE)
                         .description("Admin role")
