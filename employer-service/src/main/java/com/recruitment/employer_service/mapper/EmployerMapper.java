@@ -14,8 +14,6 @@ public interface EmployerMapper {
     @Mapping(target = "isVerified", ignore = true)
     Employer toEmployer(EmployerCreationRequest employerCreationRequest);
 
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     EmployerResponse toEmployerResponse(Employer employer);
 
     @Mapping(target = "id", ignore = true)

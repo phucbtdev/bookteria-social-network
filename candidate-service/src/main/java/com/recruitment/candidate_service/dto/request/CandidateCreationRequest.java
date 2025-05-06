@@ -1,11 +1,5 @@
 package com.recruitment.candidate_service.dto.request;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-import com.recruitment.candidate_service.entity.CandidatePackage;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,22 +7,24 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.URL;
 
-@Getter
-@Setter
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CandidateUpdateRequest {
+public class CandidateCreationRequest {
     @NotNull
-    UUID id;
+    UUID userId;
 
-    Integer currentPackageId;
+    Integer  currentPackageId;
 
     @FutureOrPresent
     LocalDate packageExpiryDate;
 
-    @NotBlank
+    @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
     @URL

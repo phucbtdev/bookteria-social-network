@@ -28,10 +28,10 @@ public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
     @NonFinal
-    static final String ADMIN_EMAIL = "phucbuitrong.dev@gmail.com";
+    static final String ADMIN_EMAIL = "admin@gmail.com";
 
     @NonFinal
-    static final String ADMIN_PASSWORD = "admin";
+    static final String ADMIN_PASSWORD = "TrongPhuc260@";
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {

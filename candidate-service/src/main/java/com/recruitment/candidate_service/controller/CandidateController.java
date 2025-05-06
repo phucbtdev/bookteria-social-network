@@ -5,10 +5,12 @@ import com.recruitment.candidate_service.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.service.CandidateService;
 import com.recruitment.common.dto.request.CandidateCreationRequest;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,20 +26,26 @@ public class CandidateController {
     CandidateService candidateService;
 
     @PostMapping
-    ApiResponse<CandidateResponse> createCandidate(@RequestBody CandidateCreationRequest request) {
+    ApiResponse<CandidateResponse> createCandidate(
+            @Valid @RequestBody CandidateCreationRequest request
+    ) {
         log.info("Create candidate request: {}", request);
         return ApiResponse.<CandidateResponse>builder()
                 .result(candidateService.createCandidate(request))
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    ApiResponse<CandidateResponse> updateCandidate(@PathVariable UUID id, @RequestBody CandidateUpdateRequest request) {
+    ApiResponse<CandidateResponse> updateCandidate(
+            @PathVariable UUID id, @Valid @RequestBody CandidateUpdateRequest request
+    ) {
         return ApiResponse.<CandidateResponse>builder()
                 .result(candidateService.updateCandidate(id, request))
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<CandidateResponse>> getCandidateList() {
         return ApiResponse.<List<CandidateResponse>>builder()
@@ -45,15 +53,20 @@ public class CandidateController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    ApiResponse<CandidateResponse> getCandidateById( @PathVariable UUID id) {
+    ApiResponse<CandidateResponse> getCandidateById(
+            @PathVariable UUID id
+    ) {
         return ApiResponse.<CandidateResponse>builder()
                 .result(candidateService.getCandidateById(id))
                 .build();
     }
 
     @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteCandidate(@PathVariable UUID id) {
+    ApiResponse<Void> deleteCandidate(
+            @PathVariable UUID id
+    ) {
         candidateService.deleteCandidate(id);
         return ApiResponse.<Void>builder()
                 .result(null)

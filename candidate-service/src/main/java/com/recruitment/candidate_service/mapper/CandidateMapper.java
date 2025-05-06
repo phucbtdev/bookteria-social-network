@@ -14,6 +14,7 @@ public interface CandidateMapper {
     Candidate toCandidate(CandidateCreationRequest candidateCreationRequest);
     CandidateResponse toCandidateResponse(Candidate candidate);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     void updateCandidateFromRequest(@MappingTarget Candidate candidate, CandidateUpdateRequest request);
 }
