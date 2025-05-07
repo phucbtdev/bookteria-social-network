@@ -1,5 +1,6 @@
 package com.recruitment.candidate_service.dto.request;
 
+import com.recruitment.candidate_service.entity.BaseEntity;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,12 +10,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CandidatePackageSubscriptionUpdateRequest {
+public class CandidatePackageSubscriptionUpdateRequest extends BaseEntity {
     UUID subscriptionCode;
 
     UUID candidateId;

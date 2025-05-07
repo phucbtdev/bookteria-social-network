@@ -64,6 +64,7 @@ public class UserService {
         CandidateCreationRequest creationRequest = CandidateCreationRequest.builder()
                 .userId(users.getId())
                 .fullName(request.getFullName())
+                .currentPackageId(1)
                 .build();
 
         kafkaTemplate.send("candidate-registration", creationRequest);

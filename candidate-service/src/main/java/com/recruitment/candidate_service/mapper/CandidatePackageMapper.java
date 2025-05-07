@@ -16,5 +16,6 @@ public interface CandidatePackageMapper {
     CandidatePackageResponse toCandidatePackageResponse(CandidatePackage candidatePackage);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     void updateCandidatePackageFromRequest(@MappingTarget CandidatePackage candidatePackage, CandidatePackageUpdateRequest request);
 }

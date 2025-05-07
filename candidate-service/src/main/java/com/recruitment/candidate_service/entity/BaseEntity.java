@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public abstract class BaseEntity {
+public abstract class BaseEntity extends SoftDeletable  {
     @Column(updatable = false)
     LocalDateTime createdAt;
 

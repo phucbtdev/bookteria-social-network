@@ -36,12 +36,12 @@ public class CandidateController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     ApiResponse<CandidateResponse> updateCandidate(
-            @PathVariable UUID id, @Valid @RequestBody CandidateUpdateRequest request
+            @PathVariable UUID userId, @Valid @RequestBody CandidateUpdateRequest request
     ) {
         return ApiResponse.<CandidateResponse>builder()
-                .result(candidateService.updateCandidate(id, request))
+                .result(candidateService.updateCandidate(userId, request))
                 .build();
     }
 
@@ -63,11 +63,11 @@ public class CandidateController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     ApiResponse<Void> deleteCandidate(
-            @PathVariable UUID id
+            @PathVariable String userId
     ) {
-        candidateService.deleteCandidate(id);
+        candidateService.deleteCandidate(userId);
         return ApiResponse.<Void>builder()
                 .result(null)
                 .build();

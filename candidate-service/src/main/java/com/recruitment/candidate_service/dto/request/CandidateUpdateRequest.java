@@ -20,8 +20,6 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateUpdateRequest {
-    @NotNull
-    UUID id;
 
     Integer currentPackageId;
 

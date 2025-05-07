@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateResponse {
-    UUID id;
     String userId;
     Short currentPackageId;
     LocalDate packageExpiryDate;
@@ -22,4 +21,5 @@ public class CandidateResponse {
     String resumeUrl;
     String linkedinUrl;
     String portfolioUrl;
+    Boolean deleted;
 }

@@ -54,9 +54,11 @@ public class CandidateService {
         return candidateMapper.toCandidateResponse(candidate);
     }
 
-    public CandidateResponse updateCandidate(UUID id, CandidateUpdateRequest request) {
-        Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+    public CandidateResponse updateCandidate(UUID userId, CandidateUpdateRequest request) {
+        Candidate candidate = candidateRepository.findByUserId(String.valueOf(userId));
+        if (candidate == null) {
+            throw new AppException(ErrorCode.RECORD_NOT_EXISTED);
+        }
         candidateMapper.updateCandidateFromRequest(candidate,request);
         return candidateMapper.toCandidateResponse(candidate);
     }
@@ -74,10 +76,12 @@ public class CandidateService {
     }
 
 
-    public void deleteCandidate(UUID id) {
-        Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
-        candidateRepository.delete(candidate);
+    public void deleteCandidate(String userId) {
+        Candidate candidate = candidateRepository.findByUserId(userId);
+        if (candidate == null) {
+            throw new AppException(ErrorCode.RECORD_NOT_EXISTED);
+        }
+        candidate.setDeleted(true);
+        candidateRepository.save(candidate);
     }
-
 }

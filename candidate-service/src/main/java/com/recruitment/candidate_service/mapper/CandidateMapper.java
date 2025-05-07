@@ -12,9 +12,11 @@ import org.mapstruct.MappingTarget;
 public interface CandidateMapper {
     @Mapping(target = "id", ignore = true)
     Candidate toCandidate(CandidateCreationRequest candidateCreationRequest);
+
     CandidateResponse toCandidateResponse(Candidate candidate);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     void updateCandidateFromRequest(@MappingTarget Candidate candidate, CandidateUpdateRequest request);
 }
