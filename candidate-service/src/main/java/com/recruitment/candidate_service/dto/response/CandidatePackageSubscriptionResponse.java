@@ -17,8 +17,6 @@ public class
 CandidatePackageSubscriptionResponse {
     UUID id;
 
-    UUID subscriptionCode;
-
     UUID candidateId;
 
     Integer packageId;

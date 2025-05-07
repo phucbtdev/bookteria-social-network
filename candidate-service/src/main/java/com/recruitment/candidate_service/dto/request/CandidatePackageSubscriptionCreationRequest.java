@@ -15,8 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidatePackageSubscriptionCreationRequest {
-    @NotNull(message = "Subscription code is required")
-    UUID subscriptionCode;
 
     @NotNull(message = "Candidate ID is required")
     UUID candidateId;

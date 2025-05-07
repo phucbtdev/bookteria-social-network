@@ -22,11 +22,7 @@ public class CandidatePackageSubscription extends BaseEntity {
     @Id
     @UuidGenerator
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
-
     UUID id;
-
-    @Column(name = "subscription_code", nullable = false, unique = true)
-    UUID subscriptionCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)

@@ -17,7 +17,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidatePackageSubscriptionUpdateRequest extends BaseEntity {
-    UUID subscriptionCode;
 
     UUID candidateId;
 

@@ -3,9 +3,13 @@ package com.recruitment.candidate_service.service;
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.entity.Candidate;
+import com.recruitment.candidate_service.entity.CandidatePackage;
+import com.recruitment.candidate_service.entity.CandidatePackageSubscription;
 import com.recruitment.candidate_service.exception.AppException;
 import com.recruitment.candidate_service.exception.ErrorCode;
 import com.recruitment.candidate_service.mapper.CandidateMapper;
+import com.recruitment.candidate_service.repository.CandidatePackageRepository;
+import com.recruitment.candidate_service.repository.CandidatePackageSubscriptionRepository;
 import com.recruitment.candidate_service.repository.CandidateRepository;
 import com.recruitment.common.dto.request.CandidateCreationRequest;
 import lombok.AccessLevel;
@@ -16,6 +20,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,13 +34,33 @@ public class CandidateService {
 
     CandidateMapper candidateMapper;
     CandidateRepository candidateRepository;
+    CandidatePackageRepository candidatePackageRepository;
+    CandidatePackageSubscriptionRepository candidatePackageSubscriptionRepository;
     KafkaTemplate<String, Object> kafkaTemplate;
 
     @KafkaListener(topics = "candidate-registration")
     public void createCandidateFromIdentity(CandidateCreationRequest creationRequest){
         try {
             Candidate candidate = candidateMapper.toCandidate(creationRequest);
-            candidateRepository.save(candidate);
+            Candidate savedCandidate = candidateRepository.save(candidate);
+            CandidatePackage candidatePackage = candidatePackageRepository
+                    .findById(creationRequest.getCurrentPackageId())
+                    .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+
+            LocalDate now = LocalDate.now();
+            LocalDate endDate = now.plusMonths(1);
+
+            CandidatePackageSubscription subscription = CandidatePackageSubscription.builder()
+                    .candidate(savedCandidate)
+                    .candidatePackage(candidatePackage)
+                    .startDate(now)
+                    .endDate(endDate)
+                    .amountPaid(BigDecimal.ZERO)
+                    .jobApplicationsUsed(0)
+                    .status(CandidatePackageSubscription.SubscriptionStatus.ACTIVE)
+                    .build();
+            candidatePackageSubscriptionRepository.save(subscription);
+
             kafkaTemplate.send("candidate-creation-success", Map.of(
                     "userId", creationRequest.getUserId().toString(),
                     "candidateId", candidate.getId().toString()
