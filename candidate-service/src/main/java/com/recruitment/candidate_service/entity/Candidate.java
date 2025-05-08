@@ -23,13 +23,12 @@ public class Candidate extends BaseEntity{
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     UUID id;
 
-    String userId;
+    UUID userId;
 
     Integer  currentPackageId;
 
     LocalDate packageExpiryDate;
 
-    @Column(length = 255)
     String fullName;
 
     @Column(columnDefinition = "text")
@@ -38,10 +37,8 @@ public class Candidate extends BaseEntity{
     @Column(columnDefinition = "text")
     String resumeUrl;
 
-    @Column(length = 255)
     String linkedinUrl;
 
-    @Column(length = 255)
     String portfolioUrl;
 
 }

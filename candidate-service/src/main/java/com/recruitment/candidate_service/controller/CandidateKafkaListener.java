@@ -15,10 +15,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class CandidateKafkaListener {
+
     KafkaTemplate<String, Object> kafkaTemplate;
     CandidateService candidateService;
+
     @KafkaListener(topics = "candidate-registration")
-    public void handleCandidateRegistration(CandidateCreationRequest creationRequest) {
+    public void handleCandidateRegistration(
+            CandidateCreationRequest creationRequest
+    ) {
         try {
             candidateService.createCandidateFromIdentity(creationRequest);
         } catch (Exception e) {
