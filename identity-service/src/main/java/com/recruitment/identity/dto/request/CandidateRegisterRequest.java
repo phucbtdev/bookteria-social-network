@@ -1,5 +1,6 @@
 package com.recruitment.identity.dto.request;
 
+import com.recruitment.identity.validator.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -15,6 +16,7 @@ public class CandidateRegisterRequest {
     @NotBlank(message = "Họ và tên không được để trống")
     String fullName;
 
+    @UniqueEmail
     @Email(message = "Email không hợp lệ")
     @NotBlank(message = "Email không được để trống")
     String email;

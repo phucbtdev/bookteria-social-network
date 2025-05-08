@@ -48,8 +48,6 @@ public class UserService {
     public void createAccountCandidate(
             CandidateRegisterRequest request
     ){
-        if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
-
         HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.CANDIDATE_ROLE).ifPresent(roles::add);
 
@@ -73,7 +71,6 @@ public class UserService {
     public void createAccountEmployer(
             EmployerRegisterRequest request
     ) {
-        if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
         HashSet<Roles> roles = new HashSet<>();
         roleRepository.findById(PredefinedRole.EMPLOYER_ROLE).ifPresent(roles::add);
         Users users = Users.builder()

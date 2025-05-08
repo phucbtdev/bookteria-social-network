@@ -1,6 +1,7 @@
 package com.recruitment.identity.dto.request;
 
 import com.recruitment.identity.validator.PasswordMatches;
+import com.recruitment.identity.validator.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -15,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @PasswordMatches
 public class EmployerRegisterRequest {
-
+    @UniqueEmail
     @Email(message = "Email không hợp lệ")
     @NotBlank(message = "Email không được để trống")
     String email;
