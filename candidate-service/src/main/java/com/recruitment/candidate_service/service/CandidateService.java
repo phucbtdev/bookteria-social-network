@@ -36,13 +36,11 @@ public class CandidateService {
     CandidateRepository candidateRepository;
     CandidatePackageRepository candidatePackageRepository;
     CandidatePackageSubscriptionRepository candidatePackageSubscriptionRepository;
-    KafkaTemplate<String, Object> kafkaTemplate;
 
-    @KafkaListener(topics = "candidate-registration")
     public void createCandidateFromIdentity(CandidateCreationRequest creationRequest){
-        try {
             Candidate candidate = candidateMapper.toCandidate(creationRequest);
             Candidate savedCandidate = candidateRepository.save(candidate);
+
             CandidatePackage candidatePackage = candidatePackageRepository
                     .findById(creationRequest.getCurrentPackageId())
                     .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
@@ -60,17 +58,6 @@ public class CandidateService {
                     .status(CandidatePackageSubscription.SubscriptionStatus.ACTIVE)
                     .build();
             candidatePackageSubscriptionRepository.save(subscription);
-
-            kafkaTemplate.send("candidate-creation-success", Map.of(
-                    "userId", creationRequest.getUserId().toString(),
-                    "candidateId", candidate.getId().toString()
-            ));
-        } catch (Exception e) {
-            kafkaTemplate.send("candidate-creation-failed", Map.of(
-                    "userId", creationRequest.getUserId(),
-                    "reason", "Exception: " + e.getMessage()
-            ) );
-        }
     }
 
     public CandidateResponse createCandidate(CandidateCreationRequest request){

@@ -83,48 +83,49 @@ public class UserService {
         EmployerCreationRequest employerCreationRequest = EmployerCreationRequest.builder()
                 .userId(users.getId())
                 .fullName(request.getFullName())
+                .currentPackageId(1)
                 .phone(request.getPhone())
                 .companyName(request.getCompanyName())
                 .companyCity(request.getCompanyCity())
                 .build();
-        log.info("Sending employer creation request: {}", employerCreationRequest);
         kafkaTemplate.send("employer-registration", employerCreationRequest);
     }
 
     @KafkaListener(topics = "employer-creation-success", groupId = "identity-group")
-    public void handleEmployerCreationSuccess(Map<String, Object> event) {
-        log.info("Received employer creation success event: {}", event);
+    public void handleEmployerCreationSuccess(
+            Map<String, Object> event
+    ) {
         UUID userId = UUID.fromString((String) event.get("userId"));
-
         userRepository.findById(userId).ifPresent(user -> {
             user.setActive(true);
             userRepository.save(user);
         });
-        log.info("✅ Employer created successfully. User activated: {}", userId);
     }
 
     @KafkaListener(topics = "employer-creation-failed", groupId = "identity-group")
-    public void handleEmployerCreationFailed(Map<String, Object> event) {
-        log.info("Received employer creation failed event: {}", event);
+    public void handleEmployerCreationFailed(
+            Map<String, Object> event
+    ) {
         UUID userId = UUID.fromString((String) event.get("userId"));
         userRepository.deleteById(userId);
     }
 
     @KafkaListener(topics = "candidate-creation-success", groupId = "identity-group")
-    public void handleCandidateCreationSuccess(Map<String, Object> event) {
-        log.info("Received candidate creation success event: {}", event);
+    public void handleCandidateCreationSuccess(
+            Map<String, Object> event
+    ) {
         UUID userId = UUID.fromString((String) event.get("userId"));
 
         userRepository.findById(userId).ifPresent(user -> {
             user.setActive(true);
             userRepository.save(user);
         });
-        log.info("✅ Candidate created successfully. User activated: {}", userId);
     }
 
     @KafkaListener(topics = "candidate-creation-failed", groupId = "identity-group")
-    public void handleCandidateCreationFailed(Map<String, Object> event) {
-        log.info("Received candidate creation failed event: {}", event);
+    public void handleCandidateCreationFailed(
+            Map<String, Object> event
+    ) {
         UUID userId = UUID.fromString((String) event.get("userId"));
         userRepository.deleteById(userId);
     }
@@ -140,7 +141,9 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUser(UUID userId, UserUpdateRequest request) {
+    public UserResponse updateUser(
+            UUID userId, UserUpdateRequest request
+    ) {
         Users users = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(users, request);
@@ -163,7 +166,9 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse getUser(UUID id) {
+    public UserResponse getUser(
+            UUID id
+    ) {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }

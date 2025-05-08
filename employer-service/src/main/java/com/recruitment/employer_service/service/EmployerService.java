@@ -1,22 +1,27 @@
 package com.recruitment.employer_service.service;
 
 import com.recruitment.common.dto.request.EmployerCreationRequest;
+import com.recruitment.employer_service.entity.EmployerPackage;
+import com.recruitment.employer_service.entity.EmployerPackageSubscriptions;
+import com.recruitment.employer_service.event.EmployerCreatedEvent;
 import com.recruitment.employer_service.exception.AppException;
 import com.recruitment.employer_service.exception.ErrorCode;
+import com.recruitment.employer_service.repository.EmployerPackageRepository;
+import com.recruitment.employer_service.repository.EmployerPackageSubscriptionRepository;
 import com.recruitment.employer_service.repository.EmployerRepository;
 import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.entity.Employer;
 import com.recruitment.employer_service.mapper.EmployerMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -26,29 +31,43 @@ import java.util.UUID;
 public class EmployerService {
     EmployerRepository employerRepository;
     EmployerMapper employerMapper;
-    KafkaTemplate<String, Object> kafkaTemplate;
+    EmployerPackageSubscriptionRepository employerPackageSubscriptionRepository;
+    EmployerPackageRepository employerPackageRepository;
+    ApplicationEventPublisher applicationEventPublisher;
 
     public EmployerResponse createEmployer(EmployerCreationRequest request) {
         return employerMapper.toEmployerResponse(employerRepository.save(employerMapper.toEmployer(request)));
     }
 
-    @KafkaListener(topics = "employer-registration")
+    @Transactional
     public void createEmployerFromIdentity(EmployerCreationRequest creationRequest){
-        log.info("Received user creation event: {}", creationRequest);
-        try {
-            Employer employer = employerMapper.toEmployer(creationRequest);
-            employerRepository.save(employer);
-            kafkaTemplate.send("employer-creation-success", Map.of(
-                            "userId", creationRequest.getUserId().toString(),
-                            "employerId", employer.getId().toString(),
-                            "companyName", employer.getCompanyName()
-                    ));
-        } catch (Exception e) {
-            kafkaTemplate.send("employer-creation-failed", Map.of(
-                    "userId", creationRequest.getUserId(),
-                    "reason", "Exception: " + e.getMessage()
-            ) );
-        }
+        Employer employer = employerMapper.toEmployer(creationRequest);
+        Employer savedEmployer = employerRepository.save(employer);
+
+        EmployerPackage employerPackage = employerPackageRepository
+                .findById(creationRequest.getCurrentPackageId())
+                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+
+        LocalDate now = LocalDate.now();
+        LocalDate endDate = now.plusMonths(1);
+
+        EmployerPackageSubscriptions employerPackageSubscriptions = EmployerPackageSubscriptions.builder()
+                .employer(savedEmployer)
+                .employerPackage(employerPackage)
+                .startDate(now)
+                .endDate(endDate)
+                .isActive(true)
+                .status("ACTIVE")
+                .build();
+        employerPackageSubscriptionRepository.save(employerPackageSubscriptions);
+
+        applicationEventPublisher.publishEvent(
+                new EmployerCreatedEvent(
+                        savedEmployer.getId(),
+                        savedEmployer.getUserId(),
+                        savedEmployer.getCompanyName()
+                )
+        );
     }
 
 
@@ -68,13 +87,13 @@ public class EmployerService {
 
     public EmployerResponse getEmployerById(UUID id) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         return employerMapper.toEmployerResponse(employer);
     }
 
     public void deleteEmployer(UUID id) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employer not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         employerRepository.delete(employer);
     }
 }

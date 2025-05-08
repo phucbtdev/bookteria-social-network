@@ -21,8 +21,6 @@ public interface EmployerPackageSubscriptionMapper {
     @Mapping(source = "packageId", target = "employerPackage.id")
     EmployerPackageSubscriptions toEntity(EmployerPackageSubscriptionUpdateRequest request);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     @Mapping(source = "employer.id", target = "employerId")
     @Mapping(source = "employerPackage.id", target = "packageId")
     EmployerPackageSubscriptionResponse toResponse(EmployerPackageSubscriptions subscription);
