@@ -1,4 +1,4 @@
-package com.recruitment.candidate_service.dto.response;
+package com.recruitment.common.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
