@@ -2,7 +2,6 @@ package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidatePackageCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidatePackageUpdateRequest;
-import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidatePackageResponse;
 import com.recruitment.candidate_service.service.CandidatePackageService;
 import com.recruitment.common.dto.response.PageResponse;
@@ -10,8 +9,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

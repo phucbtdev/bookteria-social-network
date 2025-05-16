@@ -1,10 +1,10 @@
 package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
-import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.service.CandidateService;
 import com.recruitment.common.dto.request.CandidateCreationRequest;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.common.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j

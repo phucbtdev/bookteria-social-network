@@ -2,7 +2,6 @@ package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptionCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptionUpdateRequest;
-import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidatePackageSubscriptionResponse;
 import com.recruitment.candidate_service.service.CandidatePackageSubscriptionService;
 import com.recruitment.common.dto.response.PageResponse;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
