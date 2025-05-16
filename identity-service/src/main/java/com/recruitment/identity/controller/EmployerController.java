@@ -1,6 +1,6 @@
 package com.recruitment.identity.controller;
 
-import com.recruitment.identity.dto.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.identity.dto.request.EmployerRegisterRequest;
 import com.recruitment.identity.service.UserService;
 import jakarta.validation.Valid;

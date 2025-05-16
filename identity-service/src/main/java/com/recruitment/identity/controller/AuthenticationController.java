@@ -2,7 +2,7 @@ package com.recruitment.identity.controller;
 
 import java.text.ParseException;
 
-import com.recruitment.identity.dto.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.identity.dto.request.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

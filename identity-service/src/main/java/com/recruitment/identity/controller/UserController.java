@@ -3,12 +3,9 @@ package com.recruitment.identity.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.recruitment.identity.dto.request.EmployerRegisterRequest;
-import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.*;
 
-import com.recruitment.identity.dto.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.identity.dto.request.UserUpdateRequest;
 import com.recruitment.identity.dto.response.UserResponse;
 import com.recruitment.identity.service.UserService;
