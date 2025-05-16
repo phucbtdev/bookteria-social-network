@@ -1,5 +1,6 @@
 package com.recruitment.employer_service.service;
 
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerPackageCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerPackageUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerPackageResponse;
@@ -11,6 +12,10 @@ import com.recruitment.employer_service.repository.EmployerPackageRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,11 +38,31 @@ public class EmployerPackageService {
         return employerPackageMapper.toResponse(employerPackageRepository.save(employerPackage));
     }
 
-    public List<EmployerPackageResponse> getAllEmployerPackages() {
-        return employerPackageRepository.findAll()
-                .stream()
+    public PageResponse<EmployerPackageResponse> getAllEmployerPackages(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<EmployerPackage> pageData = employerPackageRepository.findAll(pageable);
+        List<EmployerPackageResponse> dataList = pageData.getContent().stream()
                 .map(employerPackageMapper::toResponse)
                 .toList();
+
+        return PageResponse.<EmployerPackageResponse>builder()
+                .pageNo(page)
+                .pageSize(size)
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .last(pageData.isLast())
+                .data(dataList)
+                .build();
+
     }
 
     public  EmployerPackageResponse getEmployerPackageById(Integer id) {

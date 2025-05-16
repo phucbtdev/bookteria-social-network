@@ -1,8 +1,8 @@
 package com.recruitment.employer_service.controller;
 
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerPackageSubscriptionCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerPackageSubscriptionUpdateRequest;
-import com.recruitment.employer_service.dto.response.ApiResponse;
 import com.recruitment.employer_service.dto.response.EmployerPackageSubscriptionResponse;
 import com.recruitment.employer_service.service.EmployerPackageSubscriptionService;
 import lombok.AccessLevel;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -40,9 +39,14 @@ public class EmployerPackageSubscriptionController {
     }
 
     @GetMapping
-    public ApiResponse<List<EmployerPackageSubscriptionResponse>> getAllSubscriptions() {
-        return ApiResponse.<List<EmployerPackageSubscriptionResponse>>builder()
-                .result(employerPackageSubscriptionService.getAllSubscriptions())
+    public ApiResponse<PageResponse<EmployerPackageSubscriptionResponse>> getAllSubscriptions(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+        return ApiResponse.<PageResponse<EmployerPackageSubscriptionResponse>>builder()
+                .result(employerPackageSubscriptionService.getAllSubscriptions(page,size,sortBy,sortDir ))
                 .build();
     }
 

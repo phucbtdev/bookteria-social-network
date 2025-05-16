@@ -1,16 +1,14 @@
 package com.recruitment.employer_service.controller;
 
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerPackageCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerPackageUpdateRequest;
-import com.recruitment.employer_service.dto.response.ApiResponse;
 import com.recruitment.employer_service.dto.response.EmployerPackageResponse;
 import com.recruitment.employer_service.service.EmployerPackageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/employer-package")
@@ -35,9 +33,15 @@ public class EmployerPackageController {
     }
 
     @GetMapping
-    public ApiResponse<List<EmployerPackageResponse>> getAllEmployerPackages() {
-        return ApiResponse.<List<EmployerPackageResponse>>builder()
-                .result(employerPackageService.getAllEmployerPackages())
+    public ApiResponse<PageResponse<EmployerPackageResponse>> getAllEmployerPackages(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+
+    ) {
+        return ApiResponse.<PageResponse<EmployerPackageResponse>>builder()
+                .result(employerPackageService.getAllEmployerPackages(page,size,sortBy,sortDir))
                 .build();
     }
 

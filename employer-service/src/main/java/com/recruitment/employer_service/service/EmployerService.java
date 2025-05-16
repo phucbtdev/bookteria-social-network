@@ -1,6 +1,7 @@
 package com.recruitment.employer_service.service;
 
 import com.recruitment.common.dto.request.EmployerCreationRequest;
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.entity.EmployerPackage;
 import com.recruitment.employer_service.entity.EmployerPackageSubscriptions;
 import com.recruitment.employer_service.event.EmployerCreatedEvent;
@@ -18,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,7 +41,7 @@ public class EmployerService {
     ApplicationEventPublisher applicationEventPublisher;
 
     public EmployerResponse createEmployer(EmployerCreationRequest request) {
-        return employerMapper.toEmployerResponse(employerRepository.save(employerMapper.toEmployer(request)));
+        return employerMapper.toResponse(employerRepository.save(employerMapper.toEmployer(request)));
     }
 
     @Transactional
@@ -75,20 +80,39 @@ public class EmployerService {
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         employerMapper.updateEmployerFromRequest(employer, request);
-        return employerMapper.toEmployerResponse(employerRepository.save(employer));
+        return employerMapper.toResponse(employerRepository.save(employer));
     }
 
-    public List<EmployerResponse> getAllEmployers() {
-        return employerRepository.findAll()
-                .stream()
-                .map(employerMapper::toEmployerResponse)
+    public PageResponse<EmployerResponse> getAllEmployers(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<Employer> pageData = employerRepository.findAll(pageable);
+        List<EmployerResponse> dataList = pageData.getContent().stream()
+                .map(employerMapper::toResponse)
                 .toList();
+
+        return PageResponse.<EmployerResponse>builder()
+                .pageNo(page)
+                .pageSize(size)
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .last(pageData.isLast())
+                .data(dataList)
+                .build();
+
     }
 
     public EmployerResponse getEmployerById(UUID id) {
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
-        return employerMapper.toEmployerResponse(employer);
+        return employerMapper.toResponse(employer);
     }
 
     public void deleteEmployer(UUID id) {

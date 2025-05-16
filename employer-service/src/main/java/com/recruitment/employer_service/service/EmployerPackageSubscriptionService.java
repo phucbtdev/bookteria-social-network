@@ -1,5 +1,6 @@
 package com.recruitment.employer_service.service;
 
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerPackageSubscriptionCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerPackageSubscriptionUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerPackageSubscriptionResponse;
@@ -11,6 +12,10 @@ import com.recruitment.employer_service.repository.EmployerPackageSubscriptionRe
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,11 +49,29 @@ public class EmployerPackageSubscriptionService {
         );
     }
 
-    public List<EmployerPackageSubscriptionResponse> getAllSubscriptions() {
-        return employerPackageSubscriptionRepository.findAll()
-                .stream()
+    public PageResponse<EmployerPackageSubscriptionResponse> getAllSubscriptions(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<EmployerPackageSubscriptions> pageData = employerPackageSubscriptionRepository.findAll(pageable);
+        List<EmployerPackageSubscriptionResponse> dataList = pageData.getContent().stream()
                 .map(employerPackageSubscriptionMapper::toResponse)
                 .toList();
+
+        return PageResponse.<EmployerPackageSubscriptionResponse>builder()
+                .pageNo(page)
+                .pageSize(size)
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .last(pageData.isLast())
+                .data(dataList)
+                .build();
     }
 
     public EmployerPackageSubscriptionResponse getSubscriptionById(UUID id) {
