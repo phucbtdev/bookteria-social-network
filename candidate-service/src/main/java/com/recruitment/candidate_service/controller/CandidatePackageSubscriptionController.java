@@ -2,9 +2,10 @@ package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptionCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptionUpdateRequest;
-import com.recruitment.candidate_service.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidatePackageSubscriptionResponse;
 import com.recruitment.candidate_service.service.CandidatePackageSubscriptionService;
+import com.recruitment.common.dto.response.PageResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,9 +42,15 @@ public class CandidatePackageSubscriptionController {
     }
 
     @GetMapping
-    public ApiResponse<List<CandidatePackageSubscriptionResponse>> getAllCandidatePackageSubscriptions(){
-        return ApiResponse.<List<CandidatePackageSubscriptionResponse>>builder()
-                .result(candidatePackageSubscriptionService.getAllCandidatePackageSubscriptions())
+    public ApiResponse<PageResponse<CandidatePackageSubscriptionResponse>> getAllCandidatePackageSubscriptions(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+
+    ){
+        return ApiResponse.<PageResponse<CandidatePackageSubscriptionResponse>>builder()
+                .result(candidatePackageSubscriptionService.getAllCandidatePackageSubscriptions(page,size,sortBy,sortDir))
                 .build();
     }
 

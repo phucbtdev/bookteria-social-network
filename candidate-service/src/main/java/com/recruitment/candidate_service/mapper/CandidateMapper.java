@@ -13,7 +13,7 @@ public interface CandidateMapper {
     @Mapping(target = "id", ignore = true)
     Candidate toCandidate(CandidateCreationRequest candidateCreationRequest);
 
-    CandidateResponse toCandidateResponse(Candidate candidate);
+    CandidateResponse toResponse(Candidate candidate);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)

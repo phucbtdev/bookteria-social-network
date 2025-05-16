@@ -3,7 +3,7 @@ package com.recruitment.candidate_service.exception;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.recruitment.candidate_service.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

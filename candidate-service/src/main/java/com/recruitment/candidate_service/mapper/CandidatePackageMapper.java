@@ -13,7 +13,7 @@ public interface CandidatePackageMapper {
     @Mapping(target = "id", ignore = true)
     CandidatePackage toCandidatePackage(CandidatePackageCreationRequest request);
 
-    CandidatePackageResponse toCandidatePackageResponse(CandidatePackage candidatePackage);
+    CandidatePackageResponse toResponse(CandidatePackage candidatePackage);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)

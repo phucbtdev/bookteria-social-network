@@ -1,10 +1,11 @@
 package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidateUpdateRequest;
-import com.recruitment.candidate_service.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidateResponse;
 import com.recruitment.candidate_service.service.CandidateService;
 import com.recruitment.common.dto.request.CandidateCreationRequest;
+import com.recruitment.common.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +49,14 @@ public class CandidateController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    ApiResponse<List<CandidateResponse>> getCandidateList() {
-        return ApiResponse.<List<CandidateResponse>>builder()
-                .result(candidateService.getCandidateList())
+    ApiResponse<PageResponse<CandidateResponse>> getCandidateList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+        return ApiResponse.<PageResponse<CandidateResponse>>builder()
+                .result(candidateService.getCandidateList(page,size,sortBy,sortDir))
                 .build();
     }
 

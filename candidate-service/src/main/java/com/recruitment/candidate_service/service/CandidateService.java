@@ -13,12 +13,17 @@ import com.recruitment.candidate_service.repository.CandidatePackageRepository;
 import com.recruitment.candidate_service.repository.CandidatePackageSubscriptionRepository;
 import com.recruitment.candidate_service.repository.CandidateRepository;
 import com.recruitment.common.dto.request.CandidateCreationRequest;
+import com.recruitment.common.dto.response.PageResponse;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -77,7 +82,7 @@ public class CandidateService {
         Candidate candidate = candidateMapper.toCandidate(request);
         log.info("Candidate created: {}", candidate.toString());
         candidate = candidateRepository.save(candidate);
-        return candidateMapper.toCandidateResponse(candidate);
+        return candidateMapper.toResponse(candidate);
     }
 
     public CandidateResponse updateCandidate(
@@ -89,13 +94,34 @@ public class CandidateService {
             throw new AppException(ErrorCode.RECORD_NOT_EXISTED);
         }
         candidateMapper.updateCandidateFromRequest(candidate,request);
-        return candidateMapper.toCandidateResponse(candidate);
+        return candidateMapper.toResponse(candidate);
     }
 
-    public List<CandidateResponse> getCandidateList() {
-        return candidateRepository.findAll().stream()
-                .map(candidateMapper::toCandidateResponse)
+    public PageResponse<CandidateResponse> getCandidateList(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<Candidate> pageData = candidateRepository.findAll(pageable);
+        List<CandidateResponse> dataList = pageData.getContent().stream()
+                .map(candidateMapper::toResponse)
                 .toList();
+
+
+        return PageResponse.<CandidateResponse>builder()
+                .pageNo(page)
+                .pageSize(size)
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .data(dataList)
+                .build();
+
     }
 
     public CandidateResponse getCandidateById(
@@ -103,7 +129,7 @@ public class CandidateService {
     ) {
         Candidate candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
-        return candidateMapper.toCandidateResponse(candidate);
+        return candidateMapper.toResponse(candidate);
     }
 
 

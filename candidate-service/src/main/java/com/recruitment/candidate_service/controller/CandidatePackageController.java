@@ -2,9 +2,10 @@ package com.recruitment.candidate_service.controller;
 
 import com.recruitment.candidate_service.dto.request.CandidatePackageCreationRequest;
 import com.recruitment.candidate_service.dto.request.CandidatePackageUpdateRequest;
-import com.recruitment.candidate_service.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.candidate_service.dto.response.CandidatePackageResponse;
 import com.recruitment.candidate_service.service.CandidatePackageService;
+import com.recruitment.common.dto.response.PageResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,9 +35,13 @@ public class CandidatePackageController {
     }
 
     @GetMapping
-    ApiResponse<List<CandidatePackageResponse>> getAllPackages(){
-        return ApiResponse.<List<CandidatePackageResponse>>builder()
-                .result(candidatePackageService.getAllPackages())
+    ApiResponse<PageResponse<CandidatePackageResponse>> getAllPackages(@RequestParam(defaultValue = "1") int page,
+                                                                       @RequestParam(defaultValue = "10") int size,
+                                                                       @RequestParam(defaultValue = "id") String sortBy,
+                                                                       @RequestParam(defaultValue = "asc") String sortDir
+    ){
+        return ApiResponse.<PageResponse<CandidatePackageResponse>>builder()
+                .result(candidatePackageService.getAllPackages(page,size,sortBy,sortDir))
                 .build();
     }
 
