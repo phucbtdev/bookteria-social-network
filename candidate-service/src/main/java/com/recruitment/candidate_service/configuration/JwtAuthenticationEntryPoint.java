@@ -2,6 +2,7 @@ package com.recruitment.candidate_service.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recruitment.candidate_service.exception.ErrorCode;
+import com.recruitment.common.dto.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;

@@ -1,7 +1,6 @@
 package com.recruitment.job_service.exception;
 
 
-import com.recruitment.job_service.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

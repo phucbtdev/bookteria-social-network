@@ -4,6 +4,7 @@ import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptio
 import com.recruitment.candidate_service.dto.request.CandidatePackageSubscriptionUpdateRequest;
 import com.recruitment.candidate_service.dto.response.CandidatePackageSubscriptionResponse;
 import com.recruitment.candidate_service.service.CandidatePackageSubscriptionService;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.common.dto.response.PageResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
 package com.recruitment.job_service.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recruitment.job_service.dto.response.ApiResponse;
 import com.recruitment.job_service.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

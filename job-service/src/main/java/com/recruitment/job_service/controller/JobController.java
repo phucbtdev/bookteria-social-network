@@ -1,9 +1,9 @@
 package com.recruitment.job_service.controller;
 
+import com.recruitment.common.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
-import com.recruitment.job_service.dto.response.ApiResponse;
 import com.recruitment.job_service.dto.response.JobResponse;
-import com.recruitment.job_service.dto.response.PageResponse;
 import com.recruitment.job_service.service.JobService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

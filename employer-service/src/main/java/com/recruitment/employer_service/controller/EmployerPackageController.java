@@ -1,5 +1,6 @@
 package com.recruitment.employer_service.controller;
 
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerPackageCreationRequest;
 import com.recruitment.employer_service.dto.request.EmployerPackageUpdateRequest;
@@ -46,7 +47,7 @@ public class EmployerPackageController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<EmployerPackageResponse> getEmployerPackage( @PathVariable Integer id) {
+    public ApiResponse<EmployerPackageResponse> getEmployerPackage(@PathVariable Integer id) {
         return ApiResponse.<EmployerPackageResponse>builder()
                 .result(employerPackageService.getEmployerPackageById(id))
                 .build();

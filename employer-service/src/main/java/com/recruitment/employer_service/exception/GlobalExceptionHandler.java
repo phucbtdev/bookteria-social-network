@@ -17,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public class
+GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<Object>> handlingRuntimeException(RuntimeException exception) {

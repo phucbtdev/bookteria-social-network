@@ -1,8 +1,8 @@
 package com.recruitment.job_service.service;
 
+import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.response.JobResponse;
-import com.recruitment.job_service.dto.response.PageResponse;
 import com.recruitment.job_service.dto.response.UserProfileResponse;
 import com.recruitment.job_service.entity.Job;
 import com.recruitment.job_service.mapper.JobMapper;
@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j

@@ -1,6 +1,7 @@
 package com.recruitment.employer_service.controller;
 
 import com.recruitment.common.dto.request.EmployerCreationRequest;
+import com.recruitment.common.dto.response.ApiResponse;
 import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;

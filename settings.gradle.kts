@@ -5,4 +5,6 @@ include(":common")
 include(":identity-service")
 include(":employer-service")
 include(":candidate-service")
+include(":job-service")
+include(":file-service")
 
