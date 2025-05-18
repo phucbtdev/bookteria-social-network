@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class CandidatePackageService {
     }
 
     public CandidatePackageResponse updatePackage(
-            Integer id,
+            UUID id,
             CandidatePackageUpdateRequest request
     ) {
         CandidatePackage candidatePackage = candidatePackageRepository.findById(id)
@@ -68,13 +69,13 @@ public class CandidatePackageService {
 
     }
 
-    public CandidatePackageResponse getPackageById(Integer id) {
+    public CandidatePackageResponse getPackageById(UUID id) {
         CandidatePackage candidatePackage = candidatePackageRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         return candidatePackageMapper.toResponse(candidatePackage);
     }
 
-    public void deletePackage(Integer id) {
+    public void deletePackage(UUID id) {
         CandidatePackage candidatePackage = candidatePackageRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         candidatePackageRepository.delete(candidatePackage);

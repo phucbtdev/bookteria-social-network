@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class EmployerUpdateRequest {
-    Integer currentPackageId;
+    UUID currentPackageId;
 
     LocalDate packageExpiryDate;
 

@@ -3,7 +3,6 @@ package com.recruitment.employer_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,16 +15,12 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "employers")
 public class Employer extends BaseEntity {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
-    UUID id;
 
     @Column(name = "user_id")
     UUID userId;
 
     @Column(name = "current_package_id")
-    Integer currentPackageId;
+    UUID currentPackageId;
 
     @Column(name = "package_expiry_date")
     LocalDate packageExpiryDate;

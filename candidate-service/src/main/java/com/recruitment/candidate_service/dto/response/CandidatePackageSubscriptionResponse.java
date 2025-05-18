@@ -19,7 +19,7 @@ CandidatePackageSubscriptionResponse {
 
     UUID candidateId;
 
-    Integer packageId;
+    UUID packageId;
 
     LocalDate startDate;
 

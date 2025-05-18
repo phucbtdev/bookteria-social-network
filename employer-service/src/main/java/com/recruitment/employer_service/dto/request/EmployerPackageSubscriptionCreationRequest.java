@@ -17,7 +17,7 @@ public class EmployerPackageSubscriptionCreationRequest {
     UUID employerId;
 
     @NotNull(message = "Package ID is required")
-    Integer packageId;
+    UUID packageId;
 
     @NotNull(message = "Start date is required")
     LocalDate startDate;

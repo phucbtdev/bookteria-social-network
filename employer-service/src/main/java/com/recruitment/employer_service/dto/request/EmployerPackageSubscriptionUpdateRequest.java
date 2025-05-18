@@ -14,7 +14,7 @@ import java.util.UUID;
 public class EmployerPackageSubscriptionUpdateRequest {
     UUID employerId;
 
-    Integer packageId;
+    UUID packageId;
 
     LocalDate startDate;
 

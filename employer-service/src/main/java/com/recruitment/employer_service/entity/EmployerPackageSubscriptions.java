@@ -17,11 +17,6 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "employer_package_subscriptions")
 public class EmployerPackageSubscriptions extends BaseEntity {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
-    UUID id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employer_id", nullable = false)
     Employer employer;

@@ -20,7 +20,7 @@ public class CandidatePackageSubscriptionUpdateRequest extends BaseEntity {
 
     UUID candidateId;
 
-    Integer packageId;
+    UUID packageId;
 
     LocalDate startDate;
 

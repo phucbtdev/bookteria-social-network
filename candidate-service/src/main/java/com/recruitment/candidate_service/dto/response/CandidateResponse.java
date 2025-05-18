@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,8 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateResponse {
-    String userId;
-    Short currentPackageId;
+    UUID userId;
+    UUID currentPackageId;
     LocalDate packageExpiryDate;
     String fullName;
     String avatarUrl;

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/employer-package")
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class EmployerPackageController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<EmployerPackageResponse> updateEmployerPackage( @PathVariable Integer id , @RequestBody EmployerPackageUpdateRequest request) {
+    public ApiResponse<EmployerPackageResponse> updateEmployerPackage(@PathVariable UUID id , @RequestBody EmployerPackageUpdateRequest request) {
         return ApiResponse.<EmployerPackageResponse>builder()
                 .result(employerPackageService.updateEmployerPackage(id,request))
                 .build();
@@ -47,14 +49,14 @@ public class EmployerPackageController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<EmployerPackageResponse> getEmployerPackage(@PathVariable Integer id) {
+    public ApiResponse<EmployerPackageResponse> getEmployerPackage(@PathVariable UUID id) {
         return ApiResponse.<EmployerPackageResponse>builder()
                 .result(employerPackageService.getEmployerPackageById(id))
                 .build();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteEmployerPackage( @PathVariable Integer id) {
+    public ApiResponse<Void> deleteEmployerPackage( @PathVariable UUID id) {
         employerPackageService.deleteEmployerPackage(id);
         return ApiResponse.<Void>builder()
                 .result(null)

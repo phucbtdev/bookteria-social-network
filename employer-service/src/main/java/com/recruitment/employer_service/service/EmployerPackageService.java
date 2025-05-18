@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class EmployerPackageService {
         return employerPackageMapper.toResponse(employerPackageRepository.save(employerPackageMapper.toEntity(request)));
     }
 
-    public EmployerPackageResponse updateEmployerPackage(Integer id, EmployerPackageUpdateRequest request) {
+    public EmployerPackageResponse updateEmployerPackage(UUID id, EmployerPackageUpdateRequest request) {
         EmployerPackage employerPackage = employerPackageRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
         employerPackageMapper.updateEntity(employerPackage, request);
         return employerPackageMapper.toResponse(employerPackageRepository.save(employerPackage));
@@ -65,12 +66,12 @@ public class EmployerPackageService {
 
     }
 
-    public  EmployerPackageResponse getEmployerPackageById(Integer id) {
+    public  EmployerPackageResponse getEmployerPackageById(UUID id) {
         return employerPackageMapper.toResponse(employerPackageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employer package not found")));
     }
 
-    public void deleteEmployerPackage(Integer id) {
+    public void deleteEmployerPackage(UUID id) {
         EmployerPackage employerPackage = employerPackageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employer package not found"));
         employerPackageRepository.delete(employerPackage);

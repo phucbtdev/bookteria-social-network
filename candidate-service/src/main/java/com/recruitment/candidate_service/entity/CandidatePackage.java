@@ -15,10 +15,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "candidate_packages")
 public class CandidatePackage extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer  id;
-
     @Column(name = "name", length = 100, nullable = false, unique = true)
     String name;
 

@@ -3,12 +3,10 @@ package com.recruitment.candidate_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Setter
 @Getter
@@ -19,11 +17,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "candidate_package_subscriptions")
 public class CandidatePackageSubscription extends BaseEntity {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
-    UUID id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)
     Candidate candidate;

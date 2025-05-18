@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.URL;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateUpdateRequest {
 
-    Integer currentPackageId;
+    UUID currentPackageId;
 
     @FutureOrPresent
     LocalDate packageExpiryDate;

@@ -13,10 +13,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Table(name = "employer_packages")
 public class EmployerPackage extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-
     @Column(name = "name", length = 100, nullable = false, unique = true)
     String name;
 

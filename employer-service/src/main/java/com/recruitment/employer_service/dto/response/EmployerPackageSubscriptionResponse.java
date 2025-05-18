@@ -17,7 +17,7 @@ public class EmployerPackageSubscriptionResponse {
 
     UUID employerId;
 
-    Integer packageId;
+    UUID packageId;
 
     LocalDate startDate;
 

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/candidate-package")
@@ -26,7 +28,7 @@ public class CandidatePackageController {
     }
 
     @PutMapping("/{packageId}")
-    ApiResponse<CandidatePackageResponse> updatePackage(@PathVariable Integer packageId, @RequestBody CandidatePackageUpdateRequest request){
+    ApiResponse<CandidatePackageResponse> updatePackage(@PathVariable UUID packageId, @RequestBody CandidatePackageUpdateRequest request){
         return ApiResponse.<CandidatePackageResponse>builder()
                 .result(candidatePackageService.updatePackage(packageId,request))
                 .build();
@@ -45,14 +47,14 @@ public class CandidatePackageController {
 
 
     @GetMapping("/{packageId}")
-    ApiResponse<CandidatePackageResponse> getPackageById(@PathVariable Integer packageId){
+    ApiResponse<CandidatePackageResponse> getPackageById(@PathVariable UUID packageId){
         return ApiResponse.<CandidatePackageResponse>builder()
                 .result(candidatePackageService.getPackageById(packageId))
                 .build();
     }
 
     @DeleteMapping("/{packageId}")
-    ApiResponse<Void> deletePackage(@PathVariable Integer packageId){
+    ApiResponse<Void> deletePackage(@PathVariable UUID packageId){
         candidatePackageService.deletePackage(packageId);
         return ApiResponse.<Void>builder()
                 .build();
