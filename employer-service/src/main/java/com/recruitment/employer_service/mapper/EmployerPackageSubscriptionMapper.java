@@ -13,20 +13,27 @@ public interface EmployerPackageSubscriptionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "employerId", target = "employer.id")
     @Mapping(source = "packageId", target = "employerPackage.id")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     EmployerPackageSubscriptions toEntity(EmployerPackageSubscriptionCreationRequest request);
 
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "employerId", target = "employer.id")
     @Mapping(source = "packageId", target = "employerPackage.id")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     EmployerPackageSubscriptions toEntity(EmployerPackageSubscriptionUpdateRequest request);
 
     @Mapping(source = "employer.id", target = "employerId")
     @Mapping(source = "employerPackage.id", target = "packageId")
+    @Mapping(target = "createdAt", ignore = true)
     EmployerPackageSubscriptionResponse toResponse(EmployerPackageSubscriptions subscription);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "employerId", target = "employer.id")
     @Mapping(source = "packageId", target = "employerPackage.id")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateEntity(@MappingTarget EmployerPackageSubscriptions subscription, EmployerPackageSubscriptionUpdateRequest request);
 }

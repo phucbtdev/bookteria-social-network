@@ -19,7 +19,7 @@ public class CandidateCreationRequest {
     @NotNull
     UUID userId;
 
-    UUID  currentPackageId;
+    UUID  subscriptionId;
 
     @FutureOrPresent
     LocalDate packageExpiryDate;

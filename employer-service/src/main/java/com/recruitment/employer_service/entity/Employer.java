@@ -3,6 +3,7 @@ package com.recruitment.employer_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -19,8 +21,9 @@ public class Employer extends BaseEntity {
     @Column(name = "user_id")
     UUID userId;
 
-    @Column(name = "current_package_id")
-    UUID currentPackageId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_id")
+    EmployerPackageSubscriptions subscription;
 
     @Column(name = "package_expiry_date")
     LocalDate packageExpiryDate;
@@ -51,6 +54,7 @@ public class Employer extends BaseEntity {
     String companyDescription;
 
     @Column(name = "is_verified")
+    @Builder.Default
     Boolean isVerified = false;
 
 }

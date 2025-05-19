@@ -19,7 +19,9 @@ public class Candidate extends BaseEntity{
 
     UUID userId;
 
-    Integer  currentPackageId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_id")
+    CandidatePackageSubscription subscriptionId;
 
     LocalDate packageExpiryDate;
 

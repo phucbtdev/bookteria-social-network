@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface EmployerPackageRepository extends JpaRepository<EmployerPackage, UUID> {
+    EmployerPackage findByName(String name);
 }

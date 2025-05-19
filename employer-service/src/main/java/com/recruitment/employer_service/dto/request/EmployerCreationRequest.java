@@ -19,7 +19,7 @@ import java.util.UUID;
 public class EmployerCreationRequest {
     UUID userId;
 
-    UUID currentPackageId;
+    UUID subscriptionId;
 
     LocalDate packageExpiryDate;
 

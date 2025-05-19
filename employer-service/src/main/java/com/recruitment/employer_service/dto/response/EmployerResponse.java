@@ -15,7 +15,7 @@ import java.util.UUID;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class EmployerResponse {
     UUID userId;
-    UUID currentPackageId;
+    UUID subscriptionId;
     LocalDate packageExpiryDate;
     String companyName;
     String companyCity;

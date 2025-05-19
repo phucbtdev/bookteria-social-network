@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 public class EmployerCreationRequest {
     UUID userId;
 
-    UUID currentPackageId;
+    UUID subscriptionId;
 
     LocalDate packageExpiryDate;
 

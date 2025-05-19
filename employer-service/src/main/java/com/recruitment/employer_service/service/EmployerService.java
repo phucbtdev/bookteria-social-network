@@ -14,6 +14,7 @@ import com.recruitment.employer_service.dto.request.EmployerUpdateRequest;
 import com.recruitment.employer_service.dto.response.EmployerResponse;
 import com.recruitment.employer_service.entity.Employer;
 import com.recruitment.employer_service.mapper.EmployerMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,18 +46,25 @@ public class EmployerService {
         return employerMapper.toResponse(employerRepository.save(employerMapper.toEmployer(request)));
     }
 
-    @Transactional
     public void createEmployerFromIdentity(EmployerCreationRequest creationRequest){
+        //Create entity from request
         Employer employer = employerMapper.toEmployer(creationRequest);
-        Employer savedEmployer = employerRepository.save(employer);
+        if (creationRequest.getSubscriptionId() != null) {
+            EmployerPackageSubscriptions subscription = employerPackageSubscriptionRepository
+                    .findById(creationRequest.getSubscriptionId())
+                    .orElseThrow(() -> new EntityNotFoundException("Subscription not found"));
 
-        EmployerPackage employerPackage = employerPackageRepository
-                .findById(creationRequest.getCurrentPackageId())
-                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+            employer.setSubscription(subscription);
+        }
+        Employer savedEmployer =  employerRepository.save(employer);
 
+        //Find the free package for the employer
+        EmployerPackage employerPackage = employerPackageRepository.findByName("Basic");
+        //Calculate subscription dates
         LocalDate now = LocalDate.now();
-        LocalDate endDate = now.plusMonths(1);
+        LocalDate endDate = now.plusDays(employerPackage.getDurationDays());
 
+        //Create package subscription with the saved employer that has ID
         EmployerPackageSubscriptions employerPackageSubscriptions = EmployerPackageSubscriptions.builder()
                 .employer(savedEmployer)
                 .employerPackage(employerPackage)
@@ -64,15 +73,26 @@ public class EmployerService {
                 .isActive(true)
                 .status("ACTIVE")
                 .build();
-        employerPackageSubscriptionRepository.save(employerPackageSubscriptions);
 
-        applicationEventPublisher.publishEvent(
-                new EmployerCreatedEvent(
-                        savedEmployer.getId(),
-                        savedEmployer.getUserId(),
-                        savedEmployer.getCompanyName()
-                )
-        );
+        log.info("employerPackageSubscriptions : {}", employerPackageSubscriptions);
+        //Save the subscription to generate its ID
+        EmployerPackageSubscriptions savedSubscription  =  employerPackageSubscriptionRepository.save(employerPackageSubscriptions);
+            //Update the employer with the subscription reference
+            savedEmployer.setSubscription(savedSubscription);
+            savedEmployer.setPackageExpiryDate(endDate);
+
+            employerRepository.save(savedEmployer);
+            //Publish event about employer creation
+            applicationEventPublisher.publishEvent(
+                    new EmployerCreatedEvent(
+                            savedEmployer.getId(),
+                            savedEmployer.getUserId(),
+                            savedEmployer.getCompanyName()
+                    )
+            );
+
+            log.info("Employer created successfully: {}", savedEmployer);
+
     }
 
 

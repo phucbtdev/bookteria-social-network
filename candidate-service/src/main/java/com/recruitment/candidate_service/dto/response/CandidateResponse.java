@@ -14,7 +14,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateResponse {
     UUID userId;
-    UUID currentPackageId;
+    UUID subscriptionId;
     LocalDate packageExpiryDate;
     String fullName;
     String avatarUrl;

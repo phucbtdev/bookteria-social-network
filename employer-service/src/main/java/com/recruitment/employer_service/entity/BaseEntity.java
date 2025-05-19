@@ -1,17 +1,21 @@
 package com.recruitment.employer_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@MappedSuperclass
 @FieldDefaults(level = AccessLevel.PROTECTED)
+@Getter
+@Setter
+@MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public abstract class BaseEntity {
     @Id
     @UuidGenerator

@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class EmployerUpdateRequest {
-    UUID currentPackageId;
+    UUID subscriptionId;
 
     LocalDate packageExpiryDate;
 

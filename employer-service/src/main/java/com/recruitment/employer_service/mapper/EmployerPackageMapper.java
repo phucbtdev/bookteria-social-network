@@ -12,13 +12,21 @@ import org.mapstruct.MappingTarget;
 public interface EmployerPackageMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     EmployerPackage toEntity(EmployerPackageCreationRequest request);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     EmployerPackage toEntity(EmployerPackageUpdateRequest request);
 
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     EmployerPackageResponse toResponse(EmployerPackage employerPackage);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateEntity(@MappingTarget EmployerPackage employerPackage, EmployerPackageUpdateRequest request);
 }
