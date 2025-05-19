@@ -65,6 +65,7 @@ public class EmployerService {
 
         //Find the free package for the employer
         EmployerPackage employerPackage = employerPackageRepository.findByName("Basic");
+        if (employerPackage == null)  throw new AppException(ErrorCode.RECORD_NOT_EXISTED);
 
         //Calculate subscription dates
         LocalDate now = LocalDate.now();
