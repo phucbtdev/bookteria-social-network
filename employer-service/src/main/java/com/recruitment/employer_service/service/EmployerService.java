@@ -46,9 +46,12 @@ public class EmployerService {
         return employerMapper.toResponse(employerRepository.save(employerMapper.toEmployer(request)));
     }
 
+    @Transactional
     public void createEmployerFromIdentity(EmployerCreationRequest creationRequest){
         //Create entity from request
         Employer employer = employerMapper.toEmployer(creationRequest);
+
+        //Set the subscription if it exists
         if (creationRequest.getSubscriptionId() != null) {
             EmployerPackageSubscriptions subscription = employerPackageSubscriptionRepository
                     .findById(creationRequest.getSubscriptionId())
@@ -56,10 +59,13 @@ public class EmployerService {
 
             employer.setSubscription(subscription);
         }
+
+        //Save the employer to generate its ID
         Employer savedEmployer =  employerRepository.save(employer);
 
         //Find the free package for the employer
         EmployerPackage employerPackage = employerPackageRepository.findByName("Basic");
+
         //Calculate subscription dates
         LocalDate now = LocalDate.now();
         LocalDate endDate = now.plusDays(employerPackage.getDurationDays());
@@ -74,25 +80,24 @@ public class EmployerService {
                 .status("ACTIVE")
                 .build();
 
-        log.info("employerPackageSubscriptions : {}", employerPackageSubscriptions);
         //Save the subscription to generate its ID
         EmployerPackageSubscriptions savedSubscription  =  employerPackageSubscriptionRepository.save(employerPackageSubscriptions);
-            //Update the employer with the subscription reference
-            savedEmployer.setSubscription(savedSubscription);
-            savedEmployer.setPackageExpiryDate(endDate);
 
-            employerRepository.save(savedEmployer);
-            //Publish event about employer creation
-            applicationEventPublisher.publishEvent(
-                    new EmployerCreatedEvent(
-                            savedEmployer.getId(),
-                            savedEmployer.getUserId(),
-                            savedEmployer.getCompanyName()
-                    )
-            );
+        //Update the employer with the subscription reference
+        savedEmployer.setSubscription(savedSubscription);
+        savedEmployer.setPackageExpiryDate(endDate);
 
-            log.info("Employer created successfully: {}", savedEmployer);
+        //Save the employer again with the subscription reference
+        employerRepository.save(savedEmployer);
 
+        //Publish event about employer creation
+        applicationEventPublisher.publishEvent(
+                new EmployerCreatedEvent(
+                        savedEmployer.getId(),
+                        savedEmployer.getUserId(),
+                        savedEmployer.getCompanyName()
+                )
+        );
     }
 
 
