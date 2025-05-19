@@ -12,6 +12,9 @@ import org.mapstruct.MappingTarget;
 public interface CandidatePackageSubscriptionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cancelledAt", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(source = "candidateId", target = "candidate.id")
     @Mapping(source = "packageId", target = "candidatePackage.id")
     CandidatePackageSubscription toEntity(CandidatePackageSubscriptionCreationRequest request);

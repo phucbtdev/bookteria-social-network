@@ -1,17 +1,21 @@
 package com.recruitment.candidate_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@Setter
 @MappedSuperclass
 @FieldDefaults(level = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public abstract class BaseEntity extends SoftDeletable  {
     @Id
     @UuidGenerator

@@ -3,13 +3,14 @@ package com.recruitment.candidate_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -21,7 +22,7 @@ public class Candidate extends BaseEntity{
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_id")
-    CandidatePackageSubscription subscriptionId;
+    CandidatePackageSubscription subscription;
 
     LocalDate packageExpiryDate;
 

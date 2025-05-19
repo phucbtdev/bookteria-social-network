@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface CandidatePackageRepository extends JpaRepository<CandidatePackage, UUID> {
+    CandidatePackage findByName(String name);
 }

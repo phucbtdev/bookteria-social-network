@@ -47,16 +47,20 @@ public class CandidateService {
     public void createCandidateFromIdentity(
             CandidateCreationRequest creationRequest
     ){
+        //Mapping request to entity
         Candidate candidate = candidateMapper.toCandidate(creationRequest);
+
+        //Finding candidate by name
+        CandidatePackage candidatePackage = candidatePackageRepository
+                .findByName("Basic");
+        if(candidatePackage == null) throw new AppException(ErrorCode.RECORD_NOT_EXISTED);
+
+        //Save candidate
         Candidate savedCandidate = candidateRepository.save(candidate);
 
-        CandidatePackage candidatePackage = candidatePackageRepository
-                .findById(creationRequest.getCurrentPackageId())
-                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
-
+        //Setting candidate package subscription
         LocalDate now = LocalDate.now();
-        LocalDate endDate = now.plusMonths(1);
-
+        LocalDate endDate = now.plusDays(candidatePackage.getDurationDays());
         CandidatePackageSubscription subscription = CandidatePackageSubscription.builder()
                 .candidate(savedCandidate)
                 .candidatePackage(candidatePackage)
@@ -66,8 +70,18 @@ public class CandidateService {
                 .jobApplicationsUsed(0)
                 .status(CandidatePackageSubscription.SubscriptionStatus.ACTIVE)
                 .build();
-        candidatePackageSubscriptionRepository.save(subscription);
 
+        //Save subscription
+        CandidatePackageSubscription savedsubscription = candidatePackageSubscriptionRepository.save(subscription);
+
+        //Update the employer with the subscription reference
+        savedCandidate.setSubscription(savedsubscription);
+        savedCandidate.setPackageExpiryDate(endDate);
+
+        //Save the candidate again with the subscription
+        candidateRepository.save(savedCandidate);
+
+        //Publish the event
         applicationEventPublisher.publishEvent(
                 new CandidateCreatedEvent(
                         savedCandidate.getUserId(),

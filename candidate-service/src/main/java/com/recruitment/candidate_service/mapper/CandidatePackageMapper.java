@@ -11,11 +11,16 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface CandidatePackageMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     CandidatePackage toCandidatePackage(CandidatePackageCreationRequest request);
 
     CandidatePackageResponse toResponse(CandidatePackage candidatePackage);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateCandidatePackageFromRequest(@MappingTarget CandidatePackage candidatePackage, CandidatePackageUpdateRequest request);
 }
