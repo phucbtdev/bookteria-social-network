@@ -3,10 +3,10 @@ package com.recruitment.job_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -14,16 +14,12 @@ import java.util.UUID;
 @Entity
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "jobs")
 public class Job extends BaseEntity {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
-    UUID id;
 
     @Column(name = "employer_id")
     UUID employerId;
@@ -37,27 +33,31 @@ public class Job extends BaseEntity {
     @Column(name = "description", columnDefinition = "text")
     String description;
 
-    @Column(name = "industry_id")
-    UUID industryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "industry_id")
+    Industry industry;
 
-    @Column(name = "job_level_id")
-    UUID jobLevelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_level_id")
+    JobLevel jobLevel;
 
-    @Column(name = "experience_level_id")
-    UUID experienceLevelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "experience_level_id")
+    ExperienceLevel experienceLevel;
 
-    @Column(name = "salary_range_id")
-    UUID salaryRangeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "salary_range_id")
+    SalaryRange salaryRange;
 
-    @Column(name = "work_type_id")
-    UUID workTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "work_type_id")
+    WorkType workType;
 
     @Column(name = "number_of_positions", columnDefinition = "INT DEFAULT 1")
     Integer numberOfPositions;
 
-    @Column(name = "skills_required", columnDefinition = "text[]")
-    @ElementCollection
-    List<String> skillsRequired;
+    @Column(name = "skills_required", columnDefinition = "TEXT")
+    String skillsRequired;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender_requirement", columnDefinition = "varchar(6) DEFAULT 'ANY'")

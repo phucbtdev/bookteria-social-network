@@ -17,6 +17,8 @@ import java.util.UUID;
 public class JobUpdateRequest {
     String title;
 
+    String slug;
+
     String description;
 
     UUID industryId;
@@ -31,7 +33,7 @@ public class JobUpdateRequest {
 
     Integer numberOfPositions;
 
-    List<String> skillsRequired;
+    String skillsRequired;
 
     GenderRequirement genderRequirement;
 

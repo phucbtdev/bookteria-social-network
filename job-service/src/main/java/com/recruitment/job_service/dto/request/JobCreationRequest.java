@@ -21,6 +21,8 @@ public class JobCreationRequest {
     @NotNull(message = "Employer ID is required")
     UUID employerId;
 
+    String slug;
+
     @NotBlank(message = "Title is required")
     String title;
 
@@ -39,7 +41,7 @@ public class JobCreationRequest {
     @Builder.Default
     Integer numberOfPositions = 1;
 
-    List<String> skillsRequired;
+    String skillsRequired;
 
     @Builder.Default
     GenderRequirement genderRequirement = GenderRequirement.ANY;

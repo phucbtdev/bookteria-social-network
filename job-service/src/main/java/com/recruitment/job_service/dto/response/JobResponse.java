@@ -19,10 +19,6 @@ public class JobResponse {
 
     UUID employerId;
 
-    String employerName;
-
-    String companyName;
-
     String title;
 
     String slug;
@@ -31,27 +27,17 @@ public class JobResponse {
 
     UUID industryId;
 
-    String industryName;
-
     UUID jobLevelId;
-
-    String jobLevelName;
 
     UUID experienceLevelId;
 
-    String experienceLevelName;
-
     UUID salaryRangeId;
-
-    String salaryRangeDisplay;
 
     UUID workTypeId;
 
-    String workTypeName;
-
     Integer numberOfPositions;
 
-    List<String> skillsRequired;
+    String skillsRequired;
 
     GenderRequirement genderRequirement;
 

@@ -1,14 +1,27 @@
 package com.recruitment.job_service.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+@FieldDefaults(level = AccessLevel.PROTECTED)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 public abstract class BaseEntity {
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+    UUID id;
+
     @Column(updatable = false)
     protected LocalDateTime createdAt;
 
