@@ -1,10 +1,6 @@
 package com.recruitment.job_service.repository;
 
-import com.recruitment.job_service.entity.ExperienceLevel;
 import com.recruitment.job_service.entity.Industry;
-import com.recruitment.job_service.entity.Job;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
