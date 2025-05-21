@@ -1,6 +1,7 @@
 package com.recruitment.identity.configuration;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import com.recruitment.identity.entity.Roles;
 import org.springframework.boot.ApplicationRunner;
@@ -57,6 +58,7 @@ public class ApplicationInitConfig {
                 roles.add(adminRoles);
 
                 Users users = Users.builder()
+                        .id(UUID.fromString("c431828c-668e-4b2d-8f6e-18f31a622bc4"))
                         .email(ADMIN_EMAIL)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .emailVerified(true)
