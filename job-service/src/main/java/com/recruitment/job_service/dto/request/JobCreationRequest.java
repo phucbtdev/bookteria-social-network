@@ -1,5 +1,6 @@
 package com.recruitment.job_service.dto.request;
 
+import com.recruitment.job_service.entity.Job;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -23,19 +24,24 @@ public class JobCreationRequest {
 
     String slug;
 
-    @NotBlank(message = "Title is required")
+    @NotBlank(message = "Tên công việc là bắt buộc")
     String title;
 
     String description;
 
+    @NotNull(message = "Ngành nghề là bắt buộc")
     UUID industryId;
 
+    @NotNull(message = "Cấp bậc công việc là bắt buộc")
     UUID jobLevelId;
 
+    @NotNull(message = "Cấp độ kinh nghiệm là bắt buộc")
     UUID experienceLevelId;
 
+    @NotNull(message = "Mức lương là bắt buộc")
     UUID salaryRangeId;
 
+    @NotNull(message = "Hình thức làm việc là bắt buộc")
     UUID workTypeId;
 
     @Builder.Default
@@ -44,10 +50,9 @@ public class JobCreationRequest {
     String skillsRequired;
 
     @Builder.Default
-    GenderRequirement genderRequirement = GenderRequirement.ANY;
+    Job.GenderRequirement genderRequirement = Job.GenderRequirement.ANY;
 
-    String location;
-
+    @NotBlank(message = "Địa chỉ công việc là bắt buộc")
     String address;
 
     @DecimalMin(value = "-90.0", message = "Latitude must be greater than or equal to -90")
@@ -58,7 +63,7 @@ public class JobCreationRequest {
     @DecimalMax(value = "180.0", message = "Longitude must be less than or equal to 180")
     BigDecimal longitude;
 
-    @NotNull(message = "Application deadline is required")
+    @NotNull(message = "Hạn nộp hồ sơ là bắt buộc")
     LocalDate applicationDeadline;
 
     LocalDate startDate;
@@ -66,13 +71,5 @@ public class JobCreationRequest {
     LocalDate endDate;
 
     @Builder.Default
-    JobPostStatus status = JobPostStatus.PENDING;
-
-    public enum GenderRequirement {
-        ANY, MALE, FEMALE
-    }
-
-    public enum JobPostStatus {
-        PENDING, APPROVED, REJECTED
-    }
+    Job.JobPostStatus status = Job.JobPostStatus.PENDING;
 }

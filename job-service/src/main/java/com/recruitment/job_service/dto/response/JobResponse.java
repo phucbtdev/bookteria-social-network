@@ -41,8 +41,6 @@ public class JobResponse {
 
     GenderRequirement genderRequirement;
 
-    String location;
-
     String address;
 
     BigDecimal latitude;

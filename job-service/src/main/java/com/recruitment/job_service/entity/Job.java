@@ -63,9 +63,6 @@ public class Job extends BaseEntity {
     @Column(name = "gender_requirement", columnDefinition = "varchar(6) DEFAULT 'ANY'")
     GenderRequirement genderRequirement;
 
-    @Column(name = "location", columnDefinition = "text")
-    String location;
-
     @Column(name = "address", columnDefinition = "text")
     String address;
 

@@ -37,8 +37,6 @@ public class JobUpdateRequest {
 
     GenderRequirement genderRequirement;
 
-    String location;
-
     String address;
 
     @DecimalMin(value = "-90.0", message = "Latitude must be greater than or equal to -90")

@@ -5,6 +5,7 @@ import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.service.JobService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,7 +22,7 @@ public class JobController {
     JobService jobService;
 
     @PostMapping
-    ApiResponse<JobResponse> postJob(@RequestBody JobCreationRequest request ) {
+    ApiResponse<JobResponse> postJob(@RequestBody @Valid JobCreationRequest request ) {
         return ApiResponse.<JobResponse>builder()
                 .result(jobService.createJob(request))
                 .build();

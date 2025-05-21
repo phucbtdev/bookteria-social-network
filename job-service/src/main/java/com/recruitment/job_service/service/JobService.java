@@ -113,7 +113,7 @@ public class JobService {
 
        String username = userProfileResponse != null ? userProfileResponse.getFirstName() : null;
 
-       var pageData = jobRepository.findAllByEmployerId(employerId,pageable);
+       var pageData = jobRepository.findAllByEmployerId(UUID.fromString(employerId),pageable);
        var postList = pageData.getContent().stream().map(job -> {
            JobResponse jobResponse = jobMapper.toResponse(job);
 //           jobResponse.setUsername(username);
