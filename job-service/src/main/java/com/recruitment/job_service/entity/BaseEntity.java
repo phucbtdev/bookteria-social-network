@@ -18,7 +18,6 @@ import java.util.UUID;
 @SuperBuilder
 public abstract class BaseEntity {
     @Id
-    @UuidGenerator
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     UUID id;
 
@@ -29,6 +28,9 @@ public abstract class BaseEntity {
 
     @PrePersist
     protected void onCreate() {
+        if (id == null) {
+            this.id = UUID.randomUUID();
+        }
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
