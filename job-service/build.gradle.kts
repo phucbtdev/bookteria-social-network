@@ -18,9 +18,12 @@ configurations {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
 }
+
 val mapstructVersion = "1.5.5.Final"
 val lombokMapstructBindingVersion = "0.2.0"
 val springCloudVersion = "2023.0.1"
+val commonVersion = "0.0.1"
+val webmvcUi = "2.5.0"
 
 repositories {
 	mavenCentral()
@@ -30,7 +33,7 @@ repositories {
 }
 
 dependencies {
-	implementation("com.recruitment:common:0.0.1")
+	implementation("com.recruitment:common:$commonVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -41,6 +44,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$webmvcUi")
 
 	runtimeOnly("org.postgresql:postgresql")
 
