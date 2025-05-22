@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface JobRepository extends JpaRepository<Job, UUID> {
     Page<Job> findAllByEmployerId(UUID employerId, Pageable pageable);
+    boolean existsBySlug(String slug);
 }
