@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,43 +16,23 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobResponse {
     UUID id;
-
     UUID employerId;
-
     String title;
-
     String slug;
-
     String description;
-
     UUID industryId;
-
     UUID jobLevelId;
-
     UUID experienceLevelId;
-
     UUID salaryRangeId;
-
     UUID workTypeId;
-
     Integer numberOfPositions;
-
     String skillsRequired;
-
     Job.GenderRequirement genderRequirement;
-
     String address;
-
     BigDecimal latitude;
-
     BigDecimal longitude;
-
     LocalDate applicationDeadline;
-
     Job.JobPostStatus status;
-
     LocalDateTime createdAt;
-
     LocalDateTime updatedAt;
-
 }

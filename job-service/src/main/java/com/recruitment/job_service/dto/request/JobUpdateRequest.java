@@ -1,12 +1,12 @@
 package com.recruitment.job_service.dto.request;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
+import com.recruitment.job_service.entity.Job;
+import com.recruitment.job_service.validation.UniqueJobSlug;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -15,28 +15,43 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobUpdateRequest {
-    String title;
-
+    @NotBlank(message = "Slug là bắt buộc")
+    @Size(max = 255, message = "Slug không quá 255 ký tự")
+    @UniqueJobSlug
     String slug;
 
+    @NotBlank(message = "Tên công việc là bắt buộc")
+    @Size(max = 255, message = "Tiêu đề không quá 255 ký tự")
+    String title;
+
+    @NotBlank(message = "Mô tả công việc là bắt buộc")
     String description;
 
+    @NotNull(message = "Ngành nghề là bắt buộc")
     UUID industryId;
 
+    @NotNull(message = "Cấp bậc công việc là bắt buộc")
     UUID jobLevelId;
 
+    @NotNull(message = "Cấp độ kinh nghiệm là bắt buộc")
     UUID experienceLevelId;
 
+    @NotNull(message = "Mức lương là bắt buộc")
     UUID salaryRangeId;
 
+    @NotNull(message = "Hình thức làm việc là bắt buộc")
     UUID workTypeId;
 
-    Integer numberOfPositions;
+    @Min(value = 1, message = "Number of positions must be at least 1")
+    @Builder.Default
+    Integer numberOfPositions = 1;
 
     String skillsRequired;
 
-    GenderRequirement genderRequirement;
+    @Builder.Default
+    Job.GenderRequirement genderRequirement = Job.GenderRequirement.ANY;
 
+    @NotBlank(message = "Địa chỉ công việc là bắt buộc")
     String address;
 
     @DecimalMin(value = "-90.0", message = "Latitude must be greater than or equal to -90")
@@ -47,15 +62,10 @@ public class JobUpdateRequest {
     @DecimalMax(value = "180.0", message = "Longitude must be less than or equal to 180")
     BigDecimal longitude;
 
+    @NotNull(message = "Hạn nộp hồ sơ là bắt buộc")
+    @Future(message = "Hạn nộp hồ sơ phải là một ngày trong tương")
     LocalDate applicationDeadline;
 
-    JobPostStatus status;
-
-    public enum GenderRequirement {
-        ANY, MALE, FEMALE
-    }
-
-    public enum JobPostStatus {
-        PENDING, APPROVED, REJECTED
-    }
+    @Builder.Default
+    Job.JobPostStatus status = Job.JobPostStatus.PENDING;
 }
