@@ -75,12 +75,6 @@ public class Job extends BaseEntity {
     @Column(name = "application_deadline", nullable = false)
     LocalDate applicationDeadline;
 
-    @Column(name = "start_date", columnDefinition = "DATE DEFAULT CURRENT_DATE")
-    LocalDate startDate;
-
-    @Column(name = "end_date")
-    LocalDate endDate;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     JobPostStatus status;

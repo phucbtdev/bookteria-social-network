@@ -49,10 +49,6 @@ public class JobUpdateRequest {
 
     LocalDate applicationDeadline;
 
-    LocalDate startDate;
-
-    LocalDate endDate;
-
     JobPostStatus status;
 
     public enum GenderRequirement {

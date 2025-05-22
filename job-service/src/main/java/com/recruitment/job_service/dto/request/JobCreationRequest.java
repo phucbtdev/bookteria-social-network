@@ -1,6 +1,7 @@
 package com.recruitment.job_service.dto.request;
 
 import com.recruitment.job_service.entity.Job;
+import com.recruitment.job_service.validation.UniqueJobSlug;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -22,6 +22,8 @@ public class JobCreationRequest {
     @NotNull(message = "Employer ID is required")
     UUID employerId;
 
+    @NotBlank(message = "Slug là bắt buộc")
+    @UniqueJobSlug
     String slug;
 
     @NotBlank(message = "Tên công việc là bắt buộc")
@@ -65,10 +67,6 @@ public class JobCreationRequest {
 
     @NotNull(message = "Hạn nộp hồ sơ là bắt buộc")
     LocalDate applicationDeadline;
-
-    LocalDate startDate;
-
-    LocalDate endDate;
 
     @Builder.Default
     Job.JobPostStatus status = Job.JobPostStatus.PENDING;

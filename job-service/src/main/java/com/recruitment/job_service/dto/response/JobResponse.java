@@ -1,5 +1,6 @@
 package com.recruitment.job_service.dto.response;
 
+import com.recruitment.job_service.entity.Job;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -39,7 +40,7 @@ public class JobResponse {
 
     String skillsRequired;
 
-    GenderRequirement genderRequirement;
+    Job.GenderRequirement genderRequirement;
 
     String address;
 
@@ -49,21 +50,10 @@ public class JobResponse {
 
     LocalDate applicationDeadline;
 
-    LocalDate startDate;
-
-    LocalDate endDate;
-
-    JobPostStatus status;
+    Job.JobPostStatus status;
 
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
 
-    public enum GenderRequirement {
-        ANY, MALE, FEMALE
-    }
-
-    public enum JobPostStatus {
-        PENDING, APPROVED, REJECTED
-    }
 }
