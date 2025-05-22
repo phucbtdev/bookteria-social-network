@@ -1,5 +1,6 @@
 package com.recruitment.identity.entity;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +20,6 @@ import org.hibernate.annotations.UuidGenerator;
 @Table(name = "users")
 public class Users {
     @Id
-    @UuidGenerator
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     UUID id;
 
@@ -35,4 +35,11 @@ public class Users {
 
     @ManyToMany
     Set<Roles> roles;
+
+    @PrePersist
+    protected void onCreate() {
+        if (id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 }
