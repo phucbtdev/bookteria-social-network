@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.recruitment.common.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,6 +35,7 @@ GlobalExceptionHandler {
                                 .build()
                 );
     }
+
 
     @ExceptionHandler(value =  MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -64,6 +66,17 @@ GlobalExceptionHandler {
     ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         log.error("AccessDeniedException: ", exception);
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(HttpMessageNotReadableException exception) {
+        ErrorCode errorCode = ErrorCode.MISSING_BODY;
+        log.error("HttpMessageNotReadableException: ", exception);
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())

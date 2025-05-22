@@ -21,7 +21,8 @@ public enum ErrorCode {
     EXPERIENCE_LEVEL_NOT_EXISTED(1011, "Experience level not existed", HttpStatus.BAD_REQUEST),
     SALARY_RANGE_NOT_EXISTED(1012, "Salary range not existed", HttpStatus.BAD_REQUEST),
     WORK_TYPE_NOT_EXISTED(1013, "Work type not existed", HttpStatus.BAD_REQUEST),
-
+    INVALID_REQUEST(1014, "Invalid request", HttpStatus.BAD_REQUEST),
+    MISSING_BODY(1015, "Missing body", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
