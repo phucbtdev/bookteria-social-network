@@ -5,6 +5,8 @@ import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.dto.response.UserProfileResponse;
 import com.recruitment.job_service.entity.*;
+import com.recruitment.job_service.exception.AppException;
+import com.recruitment.job_service.exception.ErrorCode;
 import com.recruitment.job_service.mapper.JobMapper;
 import com.recruitment.job_service.repository.*;
 import com.recruitment.job_service.repository.httpclient.ProfileFeignRepository;
@@ -13,7 +15,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,17 +31,22 @@ import java.util.*;
 public class JobService {
     JobRepository jobRepository;
     JobMapper jobMapper;
+    ProfileFeignRepository profileFeignRepository;
     IndustryRepository industryRepo;
     JobLevelRepository jobLevelRepo;
     ExperienceLevelRepository experienceLevelRepo;
     SalaryRangeRepository salaryRangeRepo;
     WorkTypeRepository workTypeRepo;
-    ProfileFeignRepository profileFeignRepository;
 
     @Transactional
-   public JobResponse createJob(JobCreationRequest request) {
+    public JobResponse createJob(JobCreationRequest request) {
+        //Kiểm tra id của nhà tuyển dụng
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Lấy các entity
+        UUID authenticatedEmployerId = UUID.fromString(authentication.getName());
+        if (!authenticatedEmployerId.equals(request.getEmployerId())) {
+            throw new AppException(ErrorCode.INVALID_REQUEST);
+        }
+
         Map<UUID, Object> entities = fetchEntitiesByIds(Arrays.asList(
                 request.getIndustryId(), request.getJobLevelId(), request.getExperienceLevelId(),
                 request.getSalaryRangeId(), request.getWorkTypeId()
@@ -71,9 +77,8 @@ public class JobService {
         job.setWorkType(workType);
         job.setStatus(Job.JobPostStatus.PENDING);
         return  jobMapper.toResponse(jobRepository.save(job));
-   }
+    }
 
-    @Cacheable(value = "entitiesCache", key = "#ids")
     public Map<UUID, Object> fetchEntitiesByIds(List<UUID> ids) {
         // Khởi tạo map để lưu trữ kết quả
         Map<UUID, Object> result = new HashMap<>();
