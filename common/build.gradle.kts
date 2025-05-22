@@ -1,5 +1,6 @@
 plugins {
 	id("java-library")
+	id("maven-publish")
 }
 
 group = "com.recruitment"
@@ -27,6 +28,25 @@ dependencies {
 	implementation("org.projectlombok:lombok:1.18.30")
 	compileOnly("org.projectlombok:lombok:1.18.30")
 	annotationProcessor("org.projectlombok:lombok:1.18.30")
+}
+
+publishing {
+	publications {
+		create<MavenPublication>("commonLib") {
+			from(components["java"])
+			groupId = "com.recruitment"
+			artifactId = "common"
+			version = "0.0.1"
+		}
+	}
+
+	repositories {
+		// Publish ra thư mục local trong build
+		maven {
+			name = "localCommonRepo"
+			url = uri("$buildDir/repo")
+		}
+	}
 }
 
 tasks.withType<Test> {

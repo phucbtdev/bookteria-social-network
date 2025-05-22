@@ -28,10 +28,13 @@ val springCloudVersion = "2023.0.1"
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("../common/build/repo")
+    }
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation("com.recruitment:common:0.0.1")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.security:spring-security-crypto")

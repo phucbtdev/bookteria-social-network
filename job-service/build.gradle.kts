@@ -21,12 +21,16 @@ configurations {
 val mapstructVersion = "1.5.5.Final"
 val lombokMapstructBindingVersion = "0.2.0"
 val springCloudVersion = "2023.0.1"
+
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("../common/build/repo")
+	}
 }
 
 dependencies {
-	implementation(project(":common"))
+	implementation("com.recruitment:common:0.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -34,6 +38,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.mapstruct:mapstruct:$mapstructVersion")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
 
 	runtimeOnly("org.postgresql:postgresql")
 
