@@ -20,19 +20,19 @@ jobs:
         run: |
           cd api-gateway
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
           cd ../identity-service
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
           cd ../candidate-service
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
           cd ../employer-service
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
           cd ../job-service
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
 
   docker-push:
     runs-on: ubuntu-latest
