@@ -23,8 +23,12 @@ public class JobFilterRequest {
     LocalDate deadlineFrom;
     LocalDate deadlineTo;
     String location;
-    Integer page = 0;
+    @Builder.Default
+    Integer page = 1;
+    @Builder.Default
     Integer size = 10;
+    @Builder.Default
     String sortBy = "createdAt";
+    @Builder.Default
     String sortDirection = "DESC";
 }
