@@ -5,25 +5,25 @@ on:
     branches: [main]
 
 jobs:
-  build-and-publish-common:
-    runs-on: ubuntu-latest
-    env:
-      USERNAME: ${{ secrets.GH_USERNAME }}
-      TOKEN: ${{ secrets.GH_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Publish common module to GitHub Packages
-        run: |
-          cd common
-          chmod +x gradlew
-          ./gradlew publish
+#  build-and-publish-common:
+#    runs-on: ubuntu-latest
+#    env:
+#      USERNAME: ${{ secrets.GH_USERNAME }}
+#      TOKEN: ${{ secrets.GH_TOKEN }}
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: 21
+#
+#      - name: Publish common module to GitHub Packages
+#        run: |
+#          cd common
+#          chmod +x gradlew
+#          ./gradlew publish
 
   build-services:
     runs-on: ubuntu-latest
