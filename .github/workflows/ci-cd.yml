@@ -23,7 +23,6 @@ jobs:
         run: |
           cd common
           ./gradlew publish
-        working-directory: ./common
 
   build-services:
     runs-on: ubuntu-latest
