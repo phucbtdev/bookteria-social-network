@@ -17,12 +17,8 @@ jobs:
           java-version: 21
 
       - name: Build and publish common module
-        working-directory: ./common
         run: |
-          chmod +x ./gradlew
-          ./gradlew publishToMavenLocal- name: Build and publish common module
-        working-directory: ./common
-        run: |
+          cd common
           chmod +x ./gradlew
           ./gradlew publishToMavenLocal
 
