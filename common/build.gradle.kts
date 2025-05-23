@@ -32,7 +32,7 @@ dependencies {
 
 publishing {
 	publications {
-		create<MavenPublication>("commonLib") {
+		create<MavenPublication>("mavenJava") {
 			from(components["java"])
 			groupId = "com.recruitment"
 			artifactId = "common"
@@ -41,10 +41,13 @@ publishing {
 	}
 
 	repositories {
-		// Publish ra thư mục local trong build
 		maven {
-			name = "localCommonRepo"
-			url = uri("$buildDir/repo")
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/phucbtdev/bookteria-social-network")
+			credentials {
+				username = findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+				password = findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+			}
 		}
 	}
 }

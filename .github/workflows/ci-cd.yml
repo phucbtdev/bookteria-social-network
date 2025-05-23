@@ -5,8 +5,11 @@ on:
     branches: [main]
 
 jobs:
-  build-test:
+  build-and-publish-common:
     runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.GH_USERNAME }}
+      TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -16,33 +19,44 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Build and publish common module
+      - name: Publish common module to GitHub Packages
         run: |
           cd common
-          chmod +x ./gradlew
-          ./gradlew publishToMavenLocal
+          ./gradlew publish
+        working-directory: ./common
 
-      - name: Build each microservice
+  build-services:
+    runs-on: ubuntu-latest
+    needs: build-and-publish-common
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Build all services without tests
         run: |
-          cd api-gateway
-          chmod +x ./gradlew
-          ./gradlew build -x test
-          cd ../identity-service
-          chmod +x ./gradlew
-          ./gradlew build -x test
-          cd ../candidate-service
-          chmod +x ./gradlew
-          ./gradlew build -x test
-          cd ../employer-service
-          chmod +x ./gradlew
-          ./gradlew build -x test
-          cd ../job-service
-          chmod +x ./gradlew
-          ./gradlew build -x test
+          chmod +x ./api-gateway/gradlew
+          ./api-gateway/gradlew -p api-gateway build -x test
+
+          chmod +x ./identity-service/gradlew
+          ./identity-service/gradlew -p identity-service build -x test
+
+          chmod +x ./candidate-service/gradlew
+          ./candidate-service/gradlew -p candidate-service build -x test
+
+          chmod +x ./employer-service/gradlew
+          ./employer-service/gradlew -p employer-service build -x test
+
+          chmod +x ./job-service/gradlew
+          ./job-service/gradlew -p job-service build -x test
 
   docker-push:
     runs-on: ubuntu-latest
-    needs: build-test
+    needs: build-services
     steps:
       - uses: actions/checkout@v4
 
@@ -70,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker-push
     steps:
-      - name: SSH & Docker Compose Up
+      - name: SSH & Deploy via Docker Compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
