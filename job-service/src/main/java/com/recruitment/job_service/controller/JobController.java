@@ -81,7 +81,7 @@ public class JobController {
 
     @GetMapping
     ApiResponse<PageResponse<JobResponse>> getJobList(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageNo", defaultValue = "1", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
@@ -95,7 +95,7 @@ public class JobController {
     @Operation(summary = "Get jobs by employer")
     public ApiResponse<PageResponse<JobResponse>> getJobsByEmployer(
             @Parameter(description = "Employer ID") @PathVariable UUID employerId,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDirection

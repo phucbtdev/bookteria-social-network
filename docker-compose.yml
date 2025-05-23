@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  api-gateway:
+    image: phucbtdev/api-gateway:latest
+    ports:
+      - "8888:8888"
+  identity-service:
+    image: phucbtdev/identity-service:latest
+    ports:
+      - "8080:8080"
+  candidate:
+    image: phucbtdev/candidate-service:latest
+    ports:
+      - "8084:8084"
+  employer:
+    image: phucbtdev/employer-service:latest
+    ports:
+      - "8085:8085"
+  job:
+    image: phucbtdev/job-service:latest
+    ports:
+      - "8083:8083"
