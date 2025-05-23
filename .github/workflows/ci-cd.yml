@@ -22,6 +22,7 @@ jobs:
       - name: Publish common module to GitHub Packages
         run: |
           cd common
+          chmod +x gradlew
           ./gradlew publish
 
   build-services:
