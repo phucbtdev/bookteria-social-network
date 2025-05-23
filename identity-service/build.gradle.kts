@@ -29,7 +29,11 @@ val springCloudVersion = "2023.0.1"
 repositories {
     mavenCentral()
     maven {
-        url = uri("../common/build/repo")
+        url = uri("https://maven.pkg.github.com/phucbtdev/bookteria-social-network")
+        credentials {
+            username = findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+            password = findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+        }
     }
 }
 

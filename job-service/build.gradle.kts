@@ -28,12 +28,16 @@ val webmvcUi = "2.5.0"
 repositories {
 	mavenCentral()
 	maven {
-		url = uri("../common/build/repo")
+		url = uri("https://maven.pkg.github.com/phucbtdev/bookteria-social-network")
+		credentials {
+			username = findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+			password = findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+		}
 	}
 }
 
 dependencies {
-	implementation("com.recruitment:common:$commonVersion")
+	implementation("com.recruitment:common:0.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
