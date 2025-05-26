@@ -81,28 +81,65 @@ jobs:
   docker-push:
     runs-on: ubuntu-latest
     needs: build-services
+    if: >
+      contains(join(github.event.commits.*.modified, ','), 'api-gateway/') ||
+      contains(join(github.event.commits.*.modified, ','), 'identity-service/') ||
+      contains(join(github.event.commits.*.modified, ','), 'candidate-service/') ||
+      contains(join(github.event.commits.*.modified, ','), 'employer-service/') ||
+      contains(join(github.event.commits.*.modified, ','), 'job-service/')
     steps:
       - uses: actions/checkout@v4
 
-      - name: Docker Login
-        uses: docker/login-action@v3
+      - name: Push api-gateway image
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
+          image: phucbtdev/api-gateway
+          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./api-gateway/Dockerfile
+          context: ./api-gateway
 
-      - name: Build & Push Docker Images
-        run: |
-          docker build -t phucbtdev/api-gateway ./api-gateway
-          docker build -t phucbtdev/identity-service ./identity-service
-          docker build -t phucbtdev/candidate-service ./candidate-service
-          docker build -t phucbtdev/employer-service ./employer-service
-          docker build -t phucbtdev/job-service ./job-service
+      - name: Push identity-service image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: phucbtdev/identity-service
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./identity-service/Dockerfile
+          context: ./identity-service
 
-          docker push phucbtdev/api-gateway
-          docker push phucbtdev/identity-service
-          docker push phucbtdev/candidate-service
-          docker push phucbtdev/employer-service
-          docker push phucbtdev/job-service
+      - name: Push candidate-service image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: phucbtdev/candidate-service
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./candidate-service/Dockerfile
+          context: ./candidate-service
+
+      - name: Push employer-service image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: phucbtdev/employer-service
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./employer-service/Dockerfile
+          context: ./employer-service
+
+      - name: Push job-service image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: phucbtdev/job-service
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./job-service/Dockerfile
+          context: ./job-service
+
 
   deploy:
     runs-on: ubuntu-latest
