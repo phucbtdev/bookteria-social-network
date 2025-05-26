@@ -5,7 +5,11 @@ WORKDIR /app
 
 COPY . .
 
-RUN gradle bootJar --no-daemon
+# Make sure gradlew is executable
+RUN chmod +x ./gradlew
+
+# Build using wrapper (always preferred)
+RUN ./gradlew bootJar --no-daemon
 
 # Stage 2: Chạy ứng dụng với JDK
 FROM eclipse-temurin:21-jdk
