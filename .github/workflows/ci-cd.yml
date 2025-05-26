@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-publish-common:
     runs-on: ubuntu-latest
+    if: contains(join(github.event.commits.*.modified, ','), 'common/')
     env:
       USERNAME: ${{ secrets.GH_USERNAME }}
       TOKEN: ${{ secrets.GH_TOKEN }}
