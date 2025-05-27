@@ -45,15 +45,15 @@ jobs:
         service: [api-gateway, identity-service, candidate-service, employer-service, job-service]
         include:
           - service: api-gateway
-            port: 8080
+            port: 8888
           - service: identity-service
-            port: 8081
+            port: 8080
           - service: candidate-service
-            port: 8082
-          - service: employer-service
-            port: 8083
-          - service: job-service
             port: 8084
+          - service: employer-service
+            port: 8085
+          - service: job-service
+            port: 8083
     steps:
       - uses: actions/checkout@v4
 
