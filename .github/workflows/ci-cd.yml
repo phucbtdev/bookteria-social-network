@@ -88,6 +88,7 @@ jobs:
 
   docker-push:
     runs-on: ubuntu-latest
+    needs: build-services
     steps:
       - uses: actions/checkout@v4
 
