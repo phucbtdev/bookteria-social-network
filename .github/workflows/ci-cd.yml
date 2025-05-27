@@ -36,8 +36,77 @@ jobs:
           chmod +x gradlew
           ./gradlew publish
 
-  build-services:
+  docker-build-and-push:
     runs-on: ubuntu-latest
+    needs: build-and-publish-common
+    if: always() # Chạy dù job trước có skip
+    strategy:
+      matrix:
+        service: [api-gateway, identity-service, candidate-service, employer-service, job-service]
+        include:
+          - service: api-gateway
+            port: 8080
+          - service: identity-service
+            port: 8081
+          - service: candidate-service
+            port: 8082
+          - service: employer-service
+            port: 8083
+          - service: job-service
+            port: 8084
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/Dockerfile
+          push: true
+          tags: phucbtdev/${{ matrix.service }}:latest
+          build-args: |
+            USERNAME=${{ secrets.GH_USERNAME }}
+            TOKEN=${{ secrets.GH_TOKEN }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker-build-and-push
+    steps:
+      - name: SSH & Deploy via Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull phucbtdev/api-gateway:latest
+            docker pull phucbtdev/identity-service:latest
+            docker pull phucbtdev/candidate-service:latest
+            docker pull phucbtdev/employer-service:latest
+            docker pull phucbtdev/job-service:latest
+
+            docker-compose down
+            docker-compose up -dname: CI/CD Microservices Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-publish-common:
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.commits.*.modified, ','), 'common/')
     env:
       USERNAME: ${{ secrets.GH_USERNAME }}
       TOKEN: ${{ secrets.GH_TOKEN }}
@@ -56,101 +125,62 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: common-gradle-${{ runner.os }}-${{ hashFiles('common/**') }}
           restore-keys: |
-            gradle-${{ runner.os }}-
+            common-gradle-${{ runner.os }}-
 
-      - name: Build all services without tests
+      - name: Publish common module to GitHub Packages
         run: |
-          # Build api-gateway
-          cd api-gateway
+          cd common
           chmod +x gradlew
-          ./gradlew build -x test
-          cd ..
+          ./gradlew publish
 
-          # Build identity-service
-          cd identity-service
-          chmod +x gradlew
-          ./gradlew build -x test
-          cd ..
-
-          # Build candidate-service
-          cd candidate-service
-          chmod +x gradlew
-          ./gradlew build -x test
-          cd ..
-
-          # Build employer-service
-          cd employer-service
-          chmod +x gradlew
-          ./gradlew build -x test
-          cd ..
-
-          # Build job-service
-          cd job-service
-          chmod +x gradlew
-          ./gradlew build -x test
-          cd ..
-
-  docker-push:
+  docker-build-and-push:
     runs-on: ubuntu-latest
-    needs: build-services
+    needs: build-and-publish-common
+    if: always() # Chạy dù job trước có skip
+    strategy:
+      matrix:
+        service: [api-gateway, identity-service, candidate-service, employer-service, job-service]
+        include:
+          - service: api-gateway
+            port: 8888
+          - service: identity-service
+            port: 8080
+          - service: candidate-service
+            port: 8084
+          - service: employer-service
+            port: 8085
+          - service: job-service
+            port: 8083
     steps:
       - uses: actions/checkout@v4
 
-      - name: Push api-gateway image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          image: phucbtdev/api-gateway
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: ./api-gateway/Dockerfile
-          directory: ./api-gateway
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Push identity-service image
-        uses: mr-smithers-excellent/docker-build-push@v6
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          image: phucbtdev/identity-service
-          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: ./identity-service/Dockerfile
-          directory: ./identity-service
 
-      - name: Push candidate-service image
-        uses: mr-smithers-excellent/docker-build-push@v6
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
         with:
-          image: phucbtdev/candidate-service
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: ./candidate-service/Dockerfile
-          directory: ./candidate-service
-
-      - name: Push employer-service image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          image: phucbtdev/employer-service
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: ./employer-service/Dockerfile
-          directory: ./employer-service
-
-      - name: Push job-service image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          image: phucbtdev/job-service
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: ./job-service/Dockerfile
-          directory: ./job-service
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/Dockerfile
+          push: true
+          tags: phucbtdev/${{ matrix.service }}:latest
+          build-args: |
+            USERNAME=${{ secrets.GH_USERNAME }}
+            TOKEN=${{ secrets.GH_TOKEN }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     runs-on: ubuntu-latest
-    needs: docker-push
+    needs: docker-build-and-push
     steps:
       - name: SSH & Deploy via Docker Compose
         uses: appleboy/ssh-action@master
@@ -159,11 +189,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull phucbtdev/api-gateway
-            docker pull phucbtdev/identity-service
-            docker pull phucbtdev/candidate-service
-            docker pull phucbtdev/employer-service
-            docker pull phucbtdev/job-service
+            docker pull phucbtdev/api-gateway:latest
+            docker pull phucbtdev/identity-service:latest
+            docker pull phucbtdev/candidate-service:latest
+            docker pull phucbtdev/employer-service:latest
+            docker pull phucbtdev/job-service:latest
 
             docker-compose down
             docker-compose up -d
