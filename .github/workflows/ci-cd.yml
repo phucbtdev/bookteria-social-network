@@ -38,19 +38,9 @@ jobs:
 
   build-services:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
     env:
       USERNAME: ${{ secrets.GH_USERNAME }}
       TOKEN: ${{ secrets.GH_TOKEN }}
-
-    paths:
-      - 'api-gateway/**'
-      - 'identity-service/**'
-      - 'candidate-service/**'
-      - 'employer-service/**'
-      - 'job-service/**'
-      - '**/*.gradle*'
-      - '**/gradle-wrapper.properties'
     steps:
       - uses: actions/checkout@v4
 
