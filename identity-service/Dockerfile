@@ -1,4 +1,4 @@
-FROM gradle:8.5-jdk21 AS builder
+FROM gradle:8.5-jdk21 AS build-stage
 
 ARG USERNAME
 ARG TOKEN
@@ -14,8 +14,8 @@ RUN if [ -f "./gradlew" ]; then \
         gradle bootJar --no-daemon; \
     fi
 
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=build-stage /app/build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

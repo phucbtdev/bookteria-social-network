@@ -1,23 +1,21 @@
-# Stage 1: Build ứng dụng với Gradle
-FROM gradle:8.5-jdk21 AS builder
+FROM gradle:8.5-jdk21 AS build-stage
+
+ARG USERNAME
+ARG TOKEN
+ENV USERNAME=${USERNAME}
+ENV TOKEN=${TOKEN}
 
 WORKDIR /app
-
-# Copy tất cả files (vì đã set directory context)
 COPY . .
 
-# Make sure gradlew is executable (nếu có)
-RUN if [ -f "./gradlew" ]; then chmod +x ./gradlew && ./gradlew bootJar --no-daemon; else gradle bootJar --no-daemon; fi
+RUN if [ -f "./gradlew" ]; then \
+        chmod +x ./gradlew && ./gradlew bootJar --no-daemon; \
+    else \
+        gradle bootJar --no-daemon; \
+    fi
 
-# Stage 2: Chạy ứng dụng với JDK
-FROM eclipse-temurin:21-jdk
-
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-
-# Copy jar file từ build stage
-COPY --from=builder /app/build/libs/*.jar app.jar
-
-# Expose port (thay đổi port tùy theo service)
+COPY --from=build-stage /app/build/libs/*.jar app.jar
 EXPOSE 8084
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
