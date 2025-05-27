@@ -82,7 +82,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: docker-build-and-push
-    if: success()
+    if: ${{ always() && success() }}
     steps:
       - name: SSH & Deploy via Docker Compose
         uses: appleboy/ssh-action@master
