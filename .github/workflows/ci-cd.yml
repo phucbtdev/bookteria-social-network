@@ -20,16 +20,6 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Restore Gradle cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: common-gradle-${{ runner.os }}-${{ hashFiles('common/**') }}
-          restore-keys: |
-            common-gradle-${{ runner.os }}-
-
       - name: Publish common module to GitHub Packages
         run: |
           cd common
@@ -50,16 +40,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-
-      - name: Restore Gradle cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
 
       - name: Build all services without tests
         run: |
@@ -133,7 +113,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./job-service/Dockerfile
           context: ./job-service
-
 
   deploy:
     runs-on: ubuntu-latest
