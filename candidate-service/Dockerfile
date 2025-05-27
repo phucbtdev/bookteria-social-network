@@ -3,22 +3,11 @@ FROM gradle:8.5-jdk21 AS builder
 
 WORKDIR /app
 
-# Copy gradle wrapper và config files trước
-COPY gradlew* ./
-COPY gradle/ ./gradle/
+# Copy tất cả files (vì đã set directory context)
+COPY . .
 
-# Copy build files
-COPY build.gradle* ./
-COPY settings.gradle* ./
-
-# Copy source code
-COPY src/ ./src/
-
-# Make sure gradlew is executable
-RUN chmod +x ./gradlew
-
-# Build using wrapper
-RUN ./gradlew bootJar --no-daemon
+# Make sure gradlew is executable (nếu có)
+RUN if [ -f "./gradlew" ]; then chmod +x ./gradlew && ./gradlew bootJar --no-daemon; else gradle bootJar --no-daemon; fi
 
 # Stage 2: Chạy ứng dụng với JDK
 FROM eclipse-temurin:21-jdk

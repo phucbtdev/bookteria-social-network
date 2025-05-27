@@ -106,7 +106,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./api-gateway/Dockerfile
-          context: ./api-gateway
+          directory: ./api-gateway
 
       - name: Push identity-service image
         uses: mr-smithers-excellent/docker-build-push@v6
@@ -116,7 +116,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./identity-service/Dockerfile
-          context: ./identity-service
+          directory: ./identity-service
 
       - name: Push candidate-service image
         uses: mr-smithers-excellent/docker-build-push@v6
@@ -126,7 +126,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./candidate-service/Dockerfile
-          context: ./candidate-service
+          directory: ./candidate-service
 
       - name: Push employer-service image
         uses: mr-smithers-excellent/docker-build-push@v6
@@ -136,17 +136,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./employer-service/Dockerfile
-          context: ./employer-service
+          directory: ./employer-service
 
       - name: Push job-service image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: phucbtdev/job-service
           registry: docker.io
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./job-service/Dockerfile
-          context: ./job-service
+          directory: ./job-service
 
   deploy:
     runs-on: ubuntu-latest
