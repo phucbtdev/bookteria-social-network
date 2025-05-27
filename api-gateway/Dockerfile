@@ -1,4 +1,4 @@
-FROM gradle:8.5-jdk21 AS builder
+FROM eclipse-temurin:21-jre-alpine
 
 ARG USERNAME
 ARG TOKEN
