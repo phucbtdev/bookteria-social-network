@@ -4,6 +4,7 @@ import com.recruitment.candidate_service.dto.request.SavedJobCreationRequest;
 import com.recruitment.candidate_service.dto.response.SavedJobResponse;
 import com.recruitment.candidate_service.service.SavedJobService;
 import com.recruitment.common.dto.response.ApiResponse;
+import com.recruitment.common.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/saved-jobs")
+@RequestMapping("/saved-jobs")
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class SavedJobController {
@@ -42,17 +43,17 @@ public class SavedJobController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<SavedJobResponse>> getAllSavedJobs(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<PageResponse<SavedJobResponse>> getAllSavedJobs(
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "savedAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDirection) {
 
         Sort.Direction direction = sortDirection.equalsIgnoreCase("desc")
                 ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy));
 
-        Page<SavedJobResponse> savedJobs = savedJobService.getAllSavedJobs(pageable);
+        PageResponse<SavedJobResponse> savedJobs = savedJobService.getAllSavedJobs(pageable);
         return ResponseEntity.ok(savedJobs);
     }
 

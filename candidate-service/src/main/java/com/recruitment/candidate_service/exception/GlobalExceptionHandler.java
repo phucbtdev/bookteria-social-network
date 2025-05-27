@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.recruitment.common.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +21,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<Object>> handlingRuntimeException(RuntimeException exception) {
         log.error("Exception: ", exception);
-
         return ResponseEntity.badRequest()
                 .body(
                         ApiResponse.builder()
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse<Object>> handlingAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
-
+        log.error("AppException: ", exception);   log.error("AppException: ", exception);
         return ResponseEntity.status(errorCode.getStatusCode()).body(
                 ApiResponse.builder()
                         .code(errorCode.getCode())
@@ -61,11 +61,34 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-
+        log.error("AccessDeniedException: ", exception);   log.error("AccessDeniedException: ", exception);
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(HttpMessageNotReadableException exception) {
+        ErrorCode errorCode = ErrorCode.REQUEST_JON_BODY_NOT_READABLE;
+        log.error("HttpMessageNotReadableException: ", exception);   log.error("HttpMessageNotReadableException: ", exception);
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(IllegalArgumentException exception) {
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        log.error("IllegalArgumentException: ", exception);
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(exception.getMessage())
                         .build());
     }
 }
