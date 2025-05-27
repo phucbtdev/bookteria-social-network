@@ -26,6 +26,8 @@ public enum ErrorCode {
     MISSING_BODY(1015, "Missing body", HttpStatus.BAD_REQUEST),
     SLUG_EXISTED(1016, "Slug existed", HttpStatus.BAD_REQUEST),
     SLUG_NOT_EXISTED(1017, "Slug not existed", HttpStatus.BAD_REQUEST),
+    APPLICATION_ALREADY_EXISTS(1018, "Application already exists for this candidate and job", HttpStatus.BAD_REQUEST),
+    JOB_APPLICATION_NOT_EXISTED(1019, "Job application not existed", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
