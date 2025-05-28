@@ -15,6 +15,10 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    EMPLOYER_NOT_FOUND(2001, "Employer not found", HttpStatus.NOT_FOUND),
+    REVIEW_NOT_FOUND(2002, "Review not found", HttpStatus.NOT_FOUND),
+    REQUEST_JON_BODY_NOT_READABLE(2003, "Request JSON body not readable", HttpStatus.BAD_REQUEST),
+    METHOD_ARGUMENT_TYPE_MISMATCH(2004, "Method argument type mismatch", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
