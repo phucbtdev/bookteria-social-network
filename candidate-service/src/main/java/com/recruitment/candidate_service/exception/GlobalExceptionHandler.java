@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 @Slf4j
@@ -85,6 +86,17 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(IllegalArgumentException exception) {
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         log.error("IllegalArgumentException: ", exception);
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    ResponseEntity<ApiResponse<Object>> handlingAccessDeniedException(MethodArgumentTypeMismatchException exception) {
+        ErrorCode errorCode = ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH;
+        log.error("MethodArgumentTypeMismatchException: ", exception);
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())
