@@ -80,13 +80,13 @@ public class JobApplicationController {
     @GetMapping("/candidate/{candidateId}")
     public ResponseEntity<ApiResponse<PageResponse<JobApplicationResponse>>> getByCandidateId(
             @PathVariable UUID candidateId,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "appliedAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
 
         PageResponse<JobApplicationResponse> response = jobApplicationService.getByCandidateId(candidateId, pageable);
         ApiResponse<PageResponse<JobApplicationResponse>> apiResponse = ApiResponse.<PageResponse<JobApplicationResponse>>builder()
