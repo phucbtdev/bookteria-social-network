@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -85,7 +84,6 @@ public class DataSeeder implements CommandLineRunner {
             employerRepository.save(employer);
         }
 
-        System.out.println("Data seeding completed: Created 3 packages and 10 employers with subscriptions");
     }
 
     private List<EmployerPackage> createPackages() {
