@@ -39,12 +39,12 @@ public class ApplicationInitConfig {
         log.info("Initializing application.....");
         return args -> {
             if (userRepository.findByEmail(ADMIN_EMAIL).isEmpty()) {
-                roleRepository.save(Roles.builder()
+                Roles candidateRoles =roleRepository.save(Roles.builder()
                         .name(PredefinedRole.CANDIDATE_ROLE)
                         .description("Candidate role")
                         .build());
 
-                roleRepository.save(Roles.builder()
+                Roles employerRoles = roleRepository.save(Roles.builder()
                         .name(PredefinedRole.EMPLOYER_ROLE)
                         .description("Employer role")
                         .build());
@@ -53,6 +53,34 @@ public class ApplicationInitConfig {
                         .name(PredefinedRole.ADMIN_ROLE)
                         .description("Admin role")
                         .build());
+
+
+
+                var roleEmployer = new HashSet<Roles>();
+                roleEmployer.add(employerRoles);
+
+                Users employer = Users.builder()
+                        .id(UUID.fromString("c431828c-668e-4b2d-8f6e-18f31a622bc5"))
+                        .email("employer@gmail.com")
+                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                        .emailVerified(true)
+                        .roles(roleEmployer)
+                        .build();
+
+                userRepository.save(employer);
+
+                var roleCandidate = new HashSet<Roles>();
+                roleEmployer.add(employerRoles);
+
+                Users candidate = Users.builder()
+                        .id(UUID.fromString("c431828c-668e-4b2d-8f6e-18f31a622bc6"))
+                        .email("candidate@gmail.com")
+                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                        .emailVerified(true)
+                        .roles(roleCandidate)
+                        .build();
+
+                userRepository.save(candidate);
 
                 var roles = new HashSet<Roles>();
                 roles.add(adminRoles);
