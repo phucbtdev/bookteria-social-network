@@ -14,7 +14,6 @@ java {
 }
 
 val commonVer = "0.0.1"
-val elasticsearchVer = "8.13.4"
 
 repositories {
 	mavenCentral()
@@ -29,7 +28,7 @@ repositories {
 
 dependencies {
 	implementation("com.recruitment:common:$commonVer")
-	implementation("co.elastic.clients:elasticsearch-java:$elasticsearchVer")
+	implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")

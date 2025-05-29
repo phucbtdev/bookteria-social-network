@@ -1,35 +1,77 @@
 package com.recruitment.search_service.document;
 
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Document(indexName = "jobs")
+@Setting(settingPath = "/elasticsearch/settings.json")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobDocument {
+    @Id
     UUID id;
+
+    @Field(type = FieldType.Keyword)
     UUID employerId;
+
+    @Field(type = FieldType.Text, analyzer = "standard")
     String title;
+
+    @Field(type = FieldType.Keyword)
     String slug;
+
+    @Field(type = FieldType.Text, analyzer = "standard")
     String description;
-    UUID industryId;
-    UUID jobLevelId;
-    UUID experienceLevelId;
-    UUID salaryRangeId;
-    UUID workTypeId;
+
+    @Field(type = FieldType.Keyword)
+    String industry;
+
+    @Field(type = FieldType.Keyword)
+    String jobLevel;
+
+    @Field(type = FieldType.Keyword)
+    String experienceLevel;
+
+    @Field(type = FieldType.Keyword)
+    String salaryRange;
+
+    @Field(type = FieldType.Keyword)
+    String workType;
+
+    @Field(type = FieldType.Integer)
     Integer numberOfPositions;
+
+    @Field(type = FieldType.Text, analyzer = "standard")
     String skillsRequired;
+
+    @Field(type = FieldType.Keyword)
     String genderRequirement;
+
+    @Field(type = FieldType.Text)
     String address;
+
+    @Field(type = FieldType.Double)
     BigDecimal latitude;
+
+    @Field(type = FieldType.Double)
     BigDecimal longitude;
+
+    @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd")
     LocalDate applicationDeadline;
+
+    @Field(type = FieldType.Keyword)
     String status;
 }

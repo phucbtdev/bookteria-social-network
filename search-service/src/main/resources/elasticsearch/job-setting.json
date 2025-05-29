@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "standard": {
+          "type": "standard",
+          "stopwords": "_english_"
+        }
+      }
+    }
+  }
+}

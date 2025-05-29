@@ -1,6 +1,5 @@
 package com.recruitment.search_service.exception;
 
-import com.recruitment.candidate_service.exception.AppException;
 import com.recruitment.common.dto.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
