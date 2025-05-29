@@ -25,6 +25,7 @@ val springCloudVersion = "2023.0.1"
 val commonVersion = "0.0.1"
 val webmvcUi = "2.5.0"
 val commonVer = "0.0.1"
+val elasticsearchVer = "8.13.4"
 
 repositories {
 	mavenCentral()
@@ -51,6 +52,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$webmvcUi")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
+	implementation("co.elastic.clients:elasticsearch-java:$elasticsearchVer")
 
 	runtimeOnly("org.postgresql:postgresql")
 

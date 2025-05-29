@@ -4,6 +4,7 @@ import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.request.JobUpdateRequest;
 import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.entity.Job;
+import com.recruitment.job_service.event.JobEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -37,6 +38,8 @@ public interface JobMapper {
     @Mapping(target = "workTypeId", source = "workType.id")
     @Mapping(target = "industryId", source = "industry.id")
     JobResponse toResponse(Job job);
+
+    JobEvent.JobData toJobData(Job job);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "employerId", ignore = true)
