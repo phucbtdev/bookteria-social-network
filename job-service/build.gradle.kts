@@ -51,8 +51,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$webmvcUi")
-	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("co.elastic.clients:elasticsearch-java:$elasticsearchVer")
+	implementation("org.springframework.kafka:spring-kafka")
 
 	runtimeOnly("org.postgresql:postgresql")
 
