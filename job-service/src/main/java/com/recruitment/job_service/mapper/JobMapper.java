@@ -1,6 +1,6 @@
 package com.recruitment.job_service.mapper;
 
-import com.recruitment.job_service.dto.event.JobEvent;
+import com.recruitment.common.event.JobEvent;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.request.JobUpdateRequest;
 import com.recruitment.job_service.dto.response.JobResponse;

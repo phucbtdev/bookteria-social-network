@@ -1,13 +1,15 @@
 package com.recruitment.search_service.service.kafka;
 
+import com.recruitment.common.event.JobDeletedEvent;
+import com.recruitment.common.event.JobEvent;
 import com.recruitment.search_service.document.JobDocument;
-import com.recruitment.search_service.dto.event.JobEvent;
-import com.recruitment.search_service.dto.event.JobDeletedEvent;
 import com.recruitment.search_service.repository.JobSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -35,7 +37,7 @@ public class JobEventConsumer {
 
     private JobDocument mapToJobDocument(JobEvent event) {
         return JobDocument.builder()
-                .id(event.getId())
+                .id(UUID.fromString(event.getId()))
                 .employerId(event.getEmployerId())
                 .title(event.getTitle())
                 .slug(event.getSlug())

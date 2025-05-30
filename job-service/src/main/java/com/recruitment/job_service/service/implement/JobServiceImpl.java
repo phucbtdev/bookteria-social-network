@@ -1,8 +1,8 @@
 package com.recruitment.job_service.service.implement;
 
 import com.recruitment.common.dto.response.PageResponse;
-import com.recruitment.job_service.dto.event.JobDeletedEvent;
-import com.recruitment.job_service.dto.event.JobEvent;
+import com.recruitment.common.event.JobDeletedEvent;
+import com.recruitment.common.event.JobEvent;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.request.JobFilterRequest;
 import com.recruitment.job_service.dto.request.JobUpdateRequest;
