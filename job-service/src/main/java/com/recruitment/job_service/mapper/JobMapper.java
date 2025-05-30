@@ -1,10 +1,10 @@
 package com.recruitment.job_service.mapper;
 
+import com.recruitment.job_service.dto.event.JobEvent;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.request.JobUpdateRequest;
 import com.recruitment.job_service.dto.response.JobResponse;
 import com.recruitment.job_service.entity.Job;
-import com.recruitment.job_service.event.JobEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -39,7 +39,12 @@ public interface JobMapper {
     @Mapping(target = "industryId", source = "industry.id")
     JobResponse toResponse(Job job);
 
-    JobEvent.JobData toJobData(Job job);
+    @Mapping(target = "jobLevel", source = "jobLevel.name")
+    @Mapping(target = "experienceLevel", source = "experienceLevel.name")
+    @Mapping(target = "salaryRange", source = "salaryRange.minSalary")
+    @Mapping(target = "workType", source = "workType.name")
+    @Mapping(target = "industryName", source = "industry.name")
+    JobEvent mapToJobEvent(Job job);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "employerId", ignore = true)
