@@ -3,17 +3,13 @@ package com.recruitment.search_service.document;
 import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.Setting;
+import org.springframework.data.elasticsearch.annotations.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Document(indexName = "jobs")
 @Setting(settingPath = "/elasticsearch/settings.json")
+@Mapping(mappingPath = "/elasticsearch/mappings.json")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -62,15 +58,6 @@ public class JobDocument {
 
     @Field(type = FieldType.Text)
     String address;
-
-    @Field(type = FieldType.Double)
-    BigDecimal latitude;
-
-    @Field(type = FieldType.Double)
-    BigDecimal longitude;
-
-    @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd")
-    LocalDate applicationDeadline;
 
     @Field(type = FieldType.Keyword)
     String status;
