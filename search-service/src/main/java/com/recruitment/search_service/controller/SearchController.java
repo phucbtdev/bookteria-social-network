@@ -1,54 +1,39 @@
 package com.recruitment.search_service.controller;
 
 import com.recruitment.search_service.document.JobDocument;
-import com.recruitment.search_service.dto.JobSearchRequest;
-import com.recruitment.search_service.dto.response.JobSearchResponse;
-import com.recruitment.search_service.service.SearchService;
+import com.recruitment.search_service.service.JobSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/search")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class SearchController {
 
-    private final SearchService searchService;
+    private final JobSearchService jobService;
 
     @GetMapping("/jobs")
-    public ResponseEntity<JobSearchResponse> searchJobs(
+    public Page<JobDocument> searchJobs(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) UUID industryId,
-            @RequestParam(required = false) UUID jobLevelId,
-            @RequestParam(required = false) UUID experienceLevelId,
-            @RequestParam(required = false) UUID salaryRangeId,
-            @RequestParam(required = false) UUID workTypeId,
-            @RequestParam(required = false) String genderRequirement,
-            @RequestParam(required = false, defaultValue = "ACTIVE") String status,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String industry,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false, defaultValue = "relevance") String sortBy
+            @RequestParam(defaultValue = "10") int size
     ) {
-        try {
-            JobSearchResponse response = searchService.searchJobs(
-                    keyword,
-                    industryId, jobLevelId, experienceLevelId, salaryRangeId, workTypeId,
-                    genderRequirement, status, page, size, sortBy
-            );
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
+        return jobService.searchJobs(keyword, location, industry, page, size);
+    }
+
+    // Hoặc sử dụng method linh hoạt
+    @GetMapping("/jobs/flexible")
+    public Page<JobDocument> searchJobsFlexible(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String industry,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return jobService.searchJobsFlexible(keyword, location, industry, page, size);
     }
 }
