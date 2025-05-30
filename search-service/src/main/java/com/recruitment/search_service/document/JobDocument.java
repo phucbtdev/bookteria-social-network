@@ -8,8 +8,6 @@ import org.springframework.data.elasticsearch.annotations.*;
 import java.util.UUID;
 
 @Document(indexName = "jobs")
-@Setting(settingPath = "/elasticsearch/settings.json")
-@Mapping(mappingPath = "/elasticsearch/mappings.json")
 @Getter
 @Setter
 @NoArgsConstructor
