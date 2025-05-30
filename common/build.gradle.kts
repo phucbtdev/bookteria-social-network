@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.recruitment"
-version = "0.0.1"
+version = "1.0.0"
 
 java {
 	toolchain {
@@ -36,7 +36,7 @@ publishing {
 			from(components["java"])
 			groupId = "com.recruitment"
 			artifactId = "common"
-			version = "0.0.1"
+			version = "1.0.0"
 		}
 	}
 

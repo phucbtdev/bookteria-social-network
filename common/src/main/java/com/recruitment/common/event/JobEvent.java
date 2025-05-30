@@ -1,4 +1,4 @@
-package com.recruitment.search_service.dto.event;
+package com.recruitment.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JobEvent {
-        private UUID id;
+        private String id;
         private UUID employerId;
         private String title;
         private String slug;

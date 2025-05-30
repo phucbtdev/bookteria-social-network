@@ -1,4 +1,4 @@
-package com.recruitment.job_service.dto.event;
+package com.recruitment.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

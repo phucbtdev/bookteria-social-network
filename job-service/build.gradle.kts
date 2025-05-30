@@ -22,9 +22,9 @@ configurations {
 val mapstructVersion = "1.5.5.Final"
 val lombokMapstructBindingVersion = "0.2.0"
 val springCloudVersion = "2023.0.1"
-val commonVersion = "0.0.1"
+val commonVersion = "1.0.0"
 val webmvcUi = "2.5.0"
-val commonVer = "0.0.1"
+val commonVer = "1.0.0"
 val elasticsearchVer = "8.13.4"
 
 repositories {

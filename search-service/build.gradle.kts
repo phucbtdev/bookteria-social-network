@@ -13,7 +13,7 @@ java {
 	}
 }
 
-val commonVer = "0.0.1"
+val commonVer = "1.0.0"
 
 repositories {
 	mavenCentral()
