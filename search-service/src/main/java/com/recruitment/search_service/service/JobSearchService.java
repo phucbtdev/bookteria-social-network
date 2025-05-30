@@ -41,7 +41,7 @@ public class JobSearchService {
         }
 
         if (industry != null && !industry.isEmpty()) {
-            return jobRepository.findByIndustryNameContaining(industry, pageable);
+            return jobRepository.findByIndustryContaining(industry, pageable);
         }
 
         // Trả về tất cả nếu không có filter

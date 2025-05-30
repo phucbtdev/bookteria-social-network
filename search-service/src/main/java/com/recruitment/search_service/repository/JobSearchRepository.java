@@ -10,15 +10,13 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.UUID;
 
 public interface JobSearchRepository extends ElasticsearchRepository<JobDocument, UUID> {
-    // Method đơn giản cho từng trường hợp tìm kiếm
     Page<JobDocument> findByTitleContainingOrDescriptionContainingOrSkillsRequiredContaining(
             String title, String description, String skills, Pageable pageable);
 
     Page<JobDocument> findByAddressContaining(String address, Pageable pageable);
 
-    Page<JobDocument> findByIndustryNameContaining(String industryName, Pageable pageable);
+    Page<JobDocument> findByIndustryContaining(String industryName, Pageable pageable);
 
-    // Method kết hợp nhiều điều kiện
     Page<JobDocument> findByTitleContainingOrDescriptionContainingOrSkillsRequiredContainingAndAddressContaining(
             String title, String description, String skills, String address, Pageable pageable);
 
