@@ -1,9 +1,8 @@
 package com.recruitment.job_service.service.implement;
 
 import com.recruitment.common.dto.response.PageResponse;
-import com.recruitment.job_service.dto.event.JobCreatedEvent;
 import com.recruitment.job_service.dto.event.JobDeletedEvent;
-import com.recruitment.job_service.dto.event.JobUpdatedEvent;
+import com.recruitment.job_service.dto.event.JobEvent;
 import com.recruitment.job_service.dto.request.JobCreationRequest;
 import com.recruitment.job_service.dto.request.JobFilterRequest;
 import com.recruitment.job_service.dto.request.JobUpdateRequest;
@@ -14,9 +13,9 @@ import com.recruitment.job_service.exception.ErrorCode;
 import com.recruitment.job_service.mapper.JobMapper;
 import com.recruitment.job_service.repository.*;
 import com.recruitment.job_service.service.JobService;
+import com.recruitment.job_service.service.kafka.JobEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +40,7 @@ public class JobServiceImpl implements JobService {
     private final SalaryRangeRepository salaryRangeRepository;
     private final WorkTypeRepository workTypeRepository;
     private final JobMapper jobMapper;
-    private  final RabbitTemplate rabbitTemplate;
+    private final JobEventProducer jobEventProducer;
 
     @Override
     public JobResponse createJob(JobCreationRequest request) {
@@ -67,25 +66,9 @@ public class JobServiceImpl implements JobService {
         Job savedJob = jobRepository.save(job);
         log.info("Job created successfully with ID: {}", savedJob.getId());
 
-        JobCreatedEvent event = new JobCreatedEvent(
-                savedJob.getId(),
-                savedJob.getEmployerId(),
-                savedJob.getTitle(),
-                savedJob.getSlug(),
-                savedJob.getDescription(),
-                savedJob.getIndustry() != null ? savedJob.getIndustry().getId() : null,
-                savedJob.getJobLevel() != null ? savedJob.getJobLevel().getId() : null,
-                savedJob.getExperienceLevel() != null ? savedJob.getExperienceLevel().getId() : null,
-                savedJob.getSalaryRange() != null ? savedJob.getSalaryRange().getId() : null,
-                savedJob.getWorkType() != null ? savedJob.getWorkType().getId() : null,
-                savedJob.getNumberOfPositions(),
-                savedJob.getSkillsRequired(),
-                savedJob.getGenderRequirement().name(),
-                savedJob.getAddress(),
-                savedJob.getApplicationDeadline(),
-                savedJob.getStatus().name()
-        );
-        rabbitTemplate.convertAndSend("job.exchange", "job.created", event);
+        // Kafka send message
+        JobEvent event = jobMapper.mapToJobEvent(savedJob);
+        jobEventProducer.sendJobCreatedEvent(event);
 
         return jobMapper.toResponse(savedJob);
     }
@@ -128,24 +111,9 @@ public class JobServiceImpl implements JobService {
         Job updatedJob = jobRepository.save(existingJob);
         log.info("Job updated successfully with ID: {}", updatedJob.getId());
 
-        JobUpdatedEvent event = new JobUpdatedEvent(
-                updatedJob.getId(),
-                updatedJob.getTitle(),
-                updatedJob.getSlug(),
-                updatedJob.getDescription(),
-                updatedJob.getIndustry() != null ? updatedJob.getIndustry().getId() : null,
-                updatedJob.getJobLevel() != null ? updatedJob.getJobLevel().getId() : null,
-                updatedJob.getExperienceLevel() != null ? updatedJob.getExperienceLevel().getId() : null,
-                updatedJob.getSalaryRange() != null ? updatedJob.getSalaryRange().getId() : null,
-                updatedJob.getWorkType() != null ? updatedJob.getWorkType().getId() : null,
-                updatedJob.getNumberOfPositions(),
-                updatedJob.getSkillsRequired(),
-                updatedJob.getGenderRequirement().name(),
-                updatedJob.getAddress(),
-                updatedJob.getApplicationDeadline(),
-                updatedJob.getStatus().name()
-        );
-        rabbitTemplate.convertAndSend("job.exchange", "job.updated", event);
+        // Kafka send message
+        JobEvent event = jobMapper.mapToJobEvent(updatedJob);
+        jobEventProducer.sendJobUpdatedEvent(event);
 
         return jobMapper.toResponse(updatedJob);
     }
@@ -156,8 +124,9 @@ public class JobServiceImpl implements JobService {
             throw new RuntimeException("Job not found");
         }
         jobRepository.deleteById(id);
-        JobDeletedEvent event = new JobDeletedEvent(id);
-        rabbitTemplate.convertAndSend("job.exchange", "job.deleted", event);
+
+        //Kafka send message
+        jobEventProducer.sendJobDeletedEvent(new JobDeletedEvent(id));
     }
 
     @Override
