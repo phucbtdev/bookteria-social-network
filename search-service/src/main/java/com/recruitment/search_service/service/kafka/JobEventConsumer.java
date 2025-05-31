@@ -18,14 +18,8 @@ public class JobEventConsumer {
 
     private final JobSearchRepository repository;
 
-    @KafkaListener(topics = "${job.kafka.topic.created}", groupId = "search-service-group", containerFactory = "kafkaListenerContainerFactory")
-    public void handleJobCreated(JobEvent event) {
-        JobDocument doc = mapToJobDocument(event);
-        repository.save(doc);
-    }
-
-    @KafkaListener(topics = "${job.kafka.topic.updated}", groupId = "search-service-group", containerFactory = "kafkaListenerContainerFactory")
-    public void handleJobUpdated(JobEvent event) {
+    @KafkaListener(topics = "${job.kafka.topic.created-updated}", groupId = "search-service-group", containerFactory = "kafkaListenerContainerFactory")
+    public void handleJobCreatedAndUpdated(JobEvent event) {
         JobDocument doc = mapToJobDocument(event);
         repository.save(doc);
     }

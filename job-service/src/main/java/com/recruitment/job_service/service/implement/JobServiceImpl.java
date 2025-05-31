@@ -68,7 +68,7 @@ public class JobServiceImpl implements JobService {
 
         // Kafka send message
         JobEvent event = jobMapper.mapToJobEvent(savedJob);
-        jobEventProducer.sendJobCreatedEvent(event);
+        jobEventProducer.sendJobCreatedAndUpdatedEvent(event);
 
         return jobMapper.toResponse(savedJob);
     }
@@ -113,7 +113,7 @@ public class JobServiceImpl implements JobService {
 
         // Kafka send message
         JobEvent event = jobMapper.mapToJobEvent(updatedJob);
-        jobEventProducer.sendJobUpdatedEvent(event);
+        jobEventProducer.sendJobCreatedAndUpdatedEvent(event);
 
         return jobMapper.toResponse(updatedJob);
     }
