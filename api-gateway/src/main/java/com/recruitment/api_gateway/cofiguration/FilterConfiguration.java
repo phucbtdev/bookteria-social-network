@@ -47,6 +47,7 @@ public class FilterConfiguration implements GlobalFilter, Ordered {
             "/notification/send/mail",
             "/identity/employer/register",
             "/identity/candidate/register",
+            "/search-service/search/.*"
     };
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
