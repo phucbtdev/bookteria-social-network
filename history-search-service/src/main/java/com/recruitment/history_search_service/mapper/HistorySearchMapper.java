@@ -7,6 +7,4 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface HistorySearchMapper {
     HistorySearchDTO entityToDto(HistorySearch entity);
-    HistorySearch dtoToEntity(HistorySearchDTO dto);
-
 }
