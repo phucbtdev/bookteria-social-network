@@ -2,8 +2,6 @@ package com.recruitment.history_search_service.exception;
 
 
 import com.recruitment.common.dto.response.ApiResponse;
-import com.recruitment.employer_service.exception.AppException;
-import com.recruitment.employer_service.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
