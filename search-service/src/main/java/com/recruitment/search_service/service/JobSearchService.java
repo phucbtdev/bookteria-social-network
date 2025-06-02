@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -32,28 +30,33 @@ public class JobSearchService {
 
     public Page<JobDocument> searchJobs(String keyword, String location, String industry, int page, int size, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(page, size);
-        String userAgent = request.getHeader("User-Agent");
-        String ipAddress = getClientIp(request);
+
+        //Lấy userId từ JWT token
         String userId = extractUserIdFromJwt(request);
 
-        // Tạo DTO lưu lịch sử tìm kiếm
-        HistorySearchDTO historyDTO =  HistorySearchDTO.builder()
-                .keyword(keyword)
-                .location(location)
-                .industry(industry)
-                .userId(userId)
-                .userAgent(userAgent)
-                .ipAddress(ipAddress)
-                .page(pageable.getPageNumber())
-                .size(pageable.getPageSize())
-                .build();
+        if (userId != null){
+            String userAgent = request.getHeader("User-Agent");
+            String ipAddress = getClientIp(request);
 
-        // Gửi event lịch sử tìm kiếm lên Kafka
-        try {
-            String jsonMessage = objectMapper.writeValueAsString(historyDTO);
-            kafkaTemplate.send(TOPIC, jsonMessage);
-        } catch (Exception e) {
-            log.error(e.getMessage());
+            // Tạo DTO lưu lịch sử tìm kiếm
+            HistorySearchDTO historyDTO =  HistorySearchDTO.builder()
+                    .keyword(keyword)
+                    .location(location)
+                    .industry(industry)
+                    .userId(userId)
+                    .userAgent(userAgent)
+                    .ipAddress(ipAddress)
+                    .page(pageable.getPageNumber())
+                    .size(pageable.getPageSize())
+                    .build();
+
+            // Gửi event lịch sử tìm kiếm lên Kafka
+            try {
+                String jsonMessage = objectMapper.writeValueAsString(historyDTO);
+                kafkaTemplate.send(TOPIC, jsonMessage);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
         }
 
         // Cách 1: Sử dụng method đơn giản (khuyến nghị cho logic đơn giản)
@@ -118,9 +121,7 @@ public class JobSearchService {
                 // Thường là "sub"
                 log.info(String.valueOf(jwt));
                 return jwt.getSubject();
-                // Hoặc: return jwt.getClaimAsString("user_id");
             } catch (JwtException ex) {
-                // Token không hợp lệ hoặc hết hạn
                 log.error(ex.getMessage());
                 return null;
             }
