@@ -83,6 +83,17 @@ public class FilterConfiguration implements GlobalFilter, Ordered {
                     && introspectResponse.getResult() != null
                     && introspectResponse.getResult().isValid();
             if (isValid) {
+//                log.info("Token is valid for path: {}", path);
+//                // *** Thêm header Authorization vào request truyền xuống service ***
+//                ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+//                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+//                        .build();
+//
+//                ServerWebExchange mutatedExchange = exchange.mutate()
+//                        .request(mutatedRequest)
+//                        .build();
+//
+//                return chain.filter(mutatedExchange);
                 log.info("Token is valid for path: {}", path);
                 return chain.filter(exchange);
             }
