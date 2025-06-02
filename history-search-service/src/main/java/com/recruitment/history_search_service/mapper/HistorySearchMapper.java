@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 public interface HistorySearchMapper {
     HistorySearchDTO entityToDto(HistorySearch entity);
     HistorySearch dtoToEntity(HistorySearchDTO dto);
+
 }

@@ -5,7 +5,6 @@ import com.recruitment.common.dto.response.PageResponse;
 import com.recruitment.history_search_service.dto.HistorySearchDTO;
 import com.recruitment.history_search_service.service.HistorySearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
