@@ -1,7 +1,5 @@
 package com.recruitment.history_search_service.configuration;
 
-import com.recruitment.employer_service.configuration.CustomJwtDecoder;
-import com.recruitment.employer_service.configuration.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
