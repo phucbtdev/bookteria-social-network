@@ -32,6 +32,8 @@ repositories {
 
 val kafkaVer = "3.3.4"
 val commonVer = "1.0.0"
+val mapstructVersion = "1.5.5.Final"
+val lombokMapstructBindingVersion = "0.2.0"
 
 dependencies {
 	implementation("com.recruitment:common:$commonVer")
@@ -41,10 +43,15 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.kafka:spring-kafka:$kafkaVer")
+	implementation("org.mapstruct:mapstruct:$mapstructVersion")
+
+	runtimeOnly("org.postgresql:postgresql")
 
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion")
+	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
