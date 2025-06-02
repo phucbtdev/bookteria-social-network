@@ -8,19 +8,20 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HistorySearchDTO {
-    private UUID id;
-    private String userId;
-    private String keyword;
-    private String location;
-    private String industry;
-    private Integer page;
-    private Integer size;
-    private Instant searchTime;
-    private String ipAddress;
-    private String userAgent;
+    UUID id;
+    String userId;
+    String keyword;
+    String location;
+    String industry;
+    Integer page;
+    Integer size;
+    Instant searchTime;
+    String ipAddress;
+    String userAgent;
 
 }
