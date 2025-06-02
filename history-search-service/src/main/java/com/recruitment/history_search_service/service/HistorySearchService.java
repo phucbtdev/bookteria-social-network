@@ -11,6 +11,8 @@ public interface HistorySearchService {
 
     Page<HistorySearchDTO> getList(Pageable pageable);
 
+    Page<HistorySearchDTO> getListByUserId(String userId, Pageable pageable);
+
     void deleteOne(UUID id);
 
     void deleteAll();

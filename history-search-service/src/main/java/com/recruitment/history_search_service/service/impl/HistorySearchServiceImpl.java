@@ -29,6 +29,16 @@ public class HistorySearchServiceImpl implements HistorySearchService {
     }
 
     @Override
+    public Page<HistorySearchDTO> getListByUserId(String userId, Pageable pageable) {
+        Page<HistorySearch> page = repository.findAllByUserId(userId, pageable);
+        return page.map(entity -> {
+            HistorySearchDTO dto = new HistorySearchDTO();
+            BeanUtils.copyProperties(entity, dto);
+            return dto;
+        });
+    }
+
+    @Override
     public void deleteOne(UUID id) {
         repository.deleteById(id);
     }

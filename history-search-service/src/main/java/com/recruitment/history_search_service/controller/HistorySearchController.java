@@ -24,6 +24,15 @@ public class HistorySearchController {
         return service.getList(PageRequest.of(page, size));
     }
 
+    @GetMapping("{userId}/user")
+    public Page<HistorySearchDTO> getListByUserId(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return service.getListByUserId(userId, PageRequest.of(page, size));
+    }
+
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable UUID id) {
         service.deleteOne(id);
