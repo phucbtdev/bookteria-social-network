@@ -15,7 +15,7 @@ public interface HistorySearchService {
 
     void deleteOne(UUID id);
 
-    void deleteAll();
+    void deleteByUserId(String userId);
 
     void saveSearch(HistorySearchDTO dto);
 }

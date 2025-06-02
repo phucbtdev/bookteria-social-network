@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface HistorySearchRepository extends JpaRepository<HistorySearch, UUID> {
 
     Page<HistorySearch> findAllByUserId(String userId, Pageable pageable);
+
+    void deleteByUserId(String userId);
 }

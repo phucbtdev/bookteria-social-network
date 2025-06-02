@@ -44,8 +44,8 @@ public class HistorySearchServiceImpl implements HistorySearchService {
     }
 
     @Override
-    public void deleteAll() {
-        repository.deleteAll();
+    public void deleteByUserId(String userId) {
+        repository.deleteByUserId(userId);
     }
 
     @Override

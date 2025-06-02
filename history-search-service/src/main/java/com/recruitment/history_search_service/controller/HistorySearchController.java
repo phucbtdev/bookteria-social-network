@@ -39,8 +39,8 @@ public class HistorySearchController {
     }
 
     @DeleteMapping
-    public void deleteAll() {
-        service.deleteAll();
+    public void deleteByUserId(String userId) {
+        service.deleteByUserId(userId);
     }
 }
 
