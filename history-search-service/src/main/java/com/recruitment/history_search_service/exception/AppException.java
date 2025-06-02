@@ -1,6 +1,5 @@
 package com.recruitment.history_search_service.exception;
 
-import com.recruitment.employer_service.exception.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
