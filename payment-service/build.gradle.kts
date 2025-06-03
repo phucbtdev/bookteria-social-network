@@ -21,9 +21,19 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://maven.pkg.github.com/phucbtdev/bookteria-social-network")
+		credentials {
+			username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+		}
+	}
 }
 
+val commonVer = "1.0.0"
+
 dependencies {
+	implementation("com.recruitment:common:$commonVer")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
