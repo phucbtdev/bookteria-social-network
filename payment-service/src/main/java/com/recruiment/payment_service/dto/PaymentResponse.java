@@ -1,8 +1,12 @@
 package com.recruiment.payment_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.recruiment.payment_service.entity.Payment;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Đối tượng trả về thông tin thanh toán (ví dụ link thanh toán, paymentId, trạng thái,...)
@@ -10,9 +14,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaymentResponse {
-    private String paymentId;
-    private String paymentUrl; // link để redirect khách thanh toán
-    private String status; // ví dụ: PENDING
-    private String message; // Thông báo thêm nếu có
+    UUID paymentId;
+    UUID userId;
+    Payment.UserType userType;
+    UUID packageId;
+    BigDecimal amount;
+    Payment.PaymentStatus status;
+    String paymentMethod;
+    String paymentUrl; // URL để redirect đến gateway thanh toán
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }
