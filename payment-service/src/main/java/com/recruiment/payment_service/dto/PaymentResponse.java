@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,4 +28,20 @@ public class PaymentResponse {
     String paymentUrl; // URL để redirect đến gateway thanh toán
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
+    // Transaction summary
+    List<TransactionSummary> transactions;
+    TransactionSummary successfulTransaction;
+
+    @Data
+    @Builder
+    public static class TransactionSummary {
+        UUID transactionId;
+        String gateway;
+        String gatewayTransactionId;
+        BigDecimal amount;
+        String status;
+        String gatewayMessage;
+        LocalDateTime processedAt;
+    }
 }
