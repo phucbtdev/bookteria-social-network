@@ -19,8 +19,7 @@ import java.util.UUID;
 public class Transaction {
 
     @Id
-    @GeneratedValue
-    UUID transactionId;
+    String transactionId;
 
     // Reference to Payment
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,6 +70,9 @@ public class Transaction {
 
     @PrePersist
     public void prePersist() {
+        if (this.transactionId == null) {
+            this.transactionId = UUID.randomUUID().toString(); // Tạo transactionId tự động
+        }
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
     }
