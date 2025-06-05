@@ -15,7 +15,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TransactionResponse {
 
-    UUID transactionId;
+    String transactionId;
     UUID paymentId;
     String gateway;
     String gatewayTransactionId;
