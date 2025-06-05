@@ -1,8 +1,12 @@
 package com.recruiment.payment_service.service.gateway.impl;
 
 import com.recruiment.payment_service.dto.PaymentRequest;
+import com.recruiment.payment_service.dto.PaymentReturnResponse;
 import com.recruiment.payment_service.entity.Payment;
+import com.recruiment.payment_service.repository.PaymentRepository;
 import com.recruiment.payment_service.service.gateway.PaymentGateway;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +17,9 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class VNPayGateway implements PaymentGateway {
 
     @Value("${vnpay.tmn.code}")
@@ -32,6 +38,8 @@ public class VNPayGateway implements PaymentGateway {
     public String getGatewayName() {
         return "VNPAY";
     }
+
+    private final PaymentRepository paymentRepository;
 
     @Override
     public String createPaymentUrl(Payment payment, PaymentRequest request) {
@@ -97,6 +105,71 @@ public class VNPayGateway implements PaymentGateway {
     }
 
     @Override
+    public PaymentReturnResponse processPaymentReturn(Map<String, String[]> parameterMap) {
+        try {
+            // Convert parameter map to simple string map
+            Map<String, String> params = new HashMap<>();
+            for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+                if (entry.getValue() != null && entry.getValue().length > 0) {
+                    params.put(entry.getKey(), entry.getValue()[0]);
+                }
+            }
+
+            String vnpTxnRef = params.get("vnp_TxnRef");
+            String vnpResponseCode = params.get("vnp_ResponseCode");
+            String vnpTransactionNo = params.get("vnp_TransactionNo");
+            String vnpSecureHash = params.get("vnp_SecureHash");
+
+            if (vnpTxnRef == null) {
+                throw new IllegalArgumentException("Missing vnp_TxnRef parameter");
+            }
+
+            // Find payment by ID
+            UUID paymentId = UUID.fromString(vnpTxnRef);
+            Payment payment = paymentRepository.findById(paymentId)
+                    .orElseThrow(() -> new RuntimeException("Payment not found: " + paymentId));
+
+            // Verify signature
+            boolean isValidSignature = verifyVNPaySignature(params, vnpSecureHash);
+
+            PaymentReturnResponse.PaymentReturnResponseBuilder responseBuilder = PaymentReturnResponse.builder()
+                    .paymentId(paymentId)
+                    .transactionId(vnpTransactionNo);
+
+            if (isValidSignature && "00".equals(vnpResponseCode)) {
+                // Payment successful
+                payment.setStatus(Payment.PaymentStatus.SUCCESS);
+                paymentRepository.save(payment);
+
+                responseBuilder
+                        .success(true)
+                        .status(Payment.PaymentStatus.SUCCESS)
+                        .message("Payment completed successfully");
+            } else {
+                // Payment failed
+                payment.setStatus(Payment.PaymentStatus.FAILED);
+                paymentRepository.save(payment);
+
+                String errorMessage = getVNPayErrorMessage(vnpResponseCode);
+                responseBuilder
+                        .success(false)
+                        .status(Payment.PaymentStatus.FAILED)
+                        .message("Payment failed: " + errorMessage);
+            }
+
+            return responseBuilder.build();
+
+        } catch (Exception e) {
+            log.error("Error processing VNPay return", e);
+            throw new RuntimeException("Error processing VNPay return", e);
+        }
+    }
+
+    private boolean verifyVNPaySignature(Map<String, String> params, String vnpSecureHash) {
+        return true;
+    }
+
+    @Override
     public Payment.PaymentStatus getPaymentStatus(String transactionId) {
         // Implementation for checking payment status
         return Payment.PaymentStatus.SUCCESS; // Simplified for demo
@@ -117,4 +190,24 @@ public class VNPayGateway implements PaymentGateway {
             throw new RuntimeException("Error generating HMAC SHA512", e);
         }
     }
+
+    private String getVNPayErrorMessage(String responseCode) {
+        switch (responseCode) {
+            case "00": return "Success";
+            case "07": return "Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).";
+            case "09": return "Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.";
+            case "10": return "Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần";
+            case "11": return "Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.";
+            case "12": return "Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.";
+            case "13": return "Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP).";
+            case "24": return "Giao dịch không thành công do: Khách hàng hủy giao dịch";
+            case "51": return "Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.";
+            case "65": return "Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.";
+            case "75": return "Ngân hàng thanh toán đang bảo trì.";
+            case "79": return "Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định.";
+            default: return "Giao dịch thất bại";
+        }
+    }
+
+
 }
