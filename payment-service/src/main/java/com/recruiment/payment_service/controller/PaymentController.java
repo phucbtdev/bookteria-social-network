@@ -164,60 +164,6 @@ public class PaymentController {
     }
 
     /**
-     * Endpoint xử lý callback trả về chung cho tất cả các cổng thanh toán.
-     *
-     * @param gateway tên cổng thanh toán (VNPay, MoMo, v.v.).
-     * @param request đối tượng {@link HttpServletRequest} chứa thông tin từ callback.
-     * @return {@link RedirectView} chuyển hướng đến frontend với kết quả thanh toán.
-     */
-    @GetMapping("/return")
-    public RedirectView handlePaymentReturn(
-            @RequestParam String gateway,
-            HttpServletRequest request) {
-        log.info("Nhận callback trả về từ cổng thanh toán: {}", gateway);
-
-        try {
-            PaymentReturnResponse response = paymentService.processPaymentReturn(gateway.toUpperCase(), request.getParameterMap());
-
-            // Chuyển hướng về frontend với kết quả thanh toán
-            String redirectUrl = buildRedirectUrl(response);
-            return new RedirectView(redirectUrl);
-
-        } catch (Exception e) {
-            log.error("Lỗi khi xử lý callback từ cổng thanh toán: {}", gateway, e);
-            // Chuyển hướng về trang lỗi
-            return new RedirectView("http://localhost:3000/payment/error?message=Payment processing failed");
-        }
-    }
-
-    /**
-     * Endpoint kiểm tra trạng thái thanh toán.
-     *
-     * @param gateway tên cổng thanh toán.
-     * @param request đối tượng {@link HttpServletRequest} chứa thông tin từ callback.
-     * @return {@link ResponseEntity} chứa trạng thái thanh toán.
-     */
-    @GetMapping("/return/status")
-    public ResponseEntity<PaymentReturnResponse> getPaymentReturnStatus(
-            @RequestParam String gateway,
-            HttpServletRequest request) {
-        log.info("Nhận yêu cầu kiểm tra trạng thái thanh toán từ cổng thanh toán: {}", gateway);
-
-        try {
-            PaymentReturnResponse response = paymentService.processPaymentReturn(gateway.toUpperCase(), request.getParameterMap());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Lỗi khi kiểm tra trạng thái thanh toán", e);
-            return ResponseEntity.internalServerError()
-                    .body(PaymentReturnResponse.builder()
-                            .success(false)
-                            .message("Payment processing failed")
-                            .status(Payment.PaymentStatus.FAILED)
-                            .build());
-        }
-    }
-
-    /**
      * Endpoint xử lý callback từ các cổng thanh toán.
      *
      * @param gateway tên cổng thanh toán.

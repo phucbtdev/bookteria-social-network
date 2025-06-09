@@ -4,25 +4,20 @@ import com.recruiment.payment_service.dto.PaymentRequest;
 import com.recruiment.payment_service.dto.PaymentResponse;
 import com.recruiment.payment_service.dto.PaymentReturnResponse;
 import com.recruiment.payment_service.entity.Payment;
-import com.recruiment.payment_service.entity.Transaction;
+import com.recruiment.payment_service.exception.AppException;
+import com.recruiment.payment_service.exception.ErrorCode;
 import com.recruiment.payment_service.factory.PaymentGatewayFactory;
 import com.recruiment.payment_service.repository.PaymentRepository;
 import com.recruiment.payment_service.service.PaymentService;
 import com.recruiment.payment_service.service.gateway.PaymentGateway;
-import com.recruiment.payment_service.service.gateway.impl.MoMoGateway;
-import com.recruiment.payment_service.service.gateway.impl.VNPayGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -135,6 +130,14 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional(readOnly = true)
     public List<String> getSupportedPaymentMethods() {
         return gatewayFactory.getSupportedGateways();
+    }
+
+    @Override
+    public PaymentResponse getStatusPayment(UUID paymentId){
+        Payment payment = paymentRepository.findByPaymentId(paymentId).orElseThrow(() -> new AppException(ErrorCode.PAYMENT_NOT_EXIST));
+        return PaymentResponse.builder()
+                .status(payment.getStatus())
+                .build();
     }
 
     private PaymentResponse mapToPaymentResponse(Payment payment) {

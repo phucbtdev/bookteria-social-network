@@ -74,4 +74,6 @@ public interface PaymentService {
      * @return {@link PaymentReturnResponse} chứa kết quả xử lý callback.
      */
     PaymentReturnResponse processPaymentReturn(String gateway, Map<String, String[]> parameterMap);
+
+    PaymentResponse getStatusPayment(UUID paymentId);
 }
